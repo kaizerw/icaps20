@@ -1,0 +1,122 @@
+********************************************************************************
+IN LAZY CONSTRAINT CALLBACK
+SEQ: 1
+START: 0
+NODE ID: 0
+INCUMBENT: 1e+75
+Z: 6
+F-BOUND: 6
+6 OPERATORS AVAILABLE: 
+	[1] (1) move loc-x0-y0 loc-x0-y1
+	[1] (1) move loc-x0-y1 loc-x0-y0
+	[1] (1) move loc-x0-y1 loc-x0-y2
+	[1] (1) move loc-x0-y2 loc-x0-y1
+	[1] (1) move loc-x1-y1 loc-x2-y1
+	[1] (1) move loc-x2-y1 loc-x2-y0
+OP COUNT IN CACHE? false
+SEQUENCIABLE? false
+LEARNED GLC WITH 6 BOUNDS:
+	[YT >= 7]
+	[move loc-x1-y1 loc-x1-y2 >= 1]
+	[move loc-x1-y1 loc-x0-y1 >= 1]
+	[move loc-x1-y0 loc-x2-y0 >= 1]
+	[move loc-x1-y0 loc-x0-y0 >= 1]
+	[move loc-x0-y2 loc-x1-y2 >= 1]
+REPEATED GLC? false
+
+Implied bound cuts: 0
+Zero-half cuts: 0
+Gomory fractional cuts: 0
+User cuts: 0
+CUT: 1 <= [YT >= 7]  + [move loc-x1-y1 loc-x1-y2 >= 1]  + [move loc-x1-y1 loc-x0-y1 >= 1]  + [move loc-x1-y0 loc-x2-y0 >= 1]  + [move loc-x1-y0 loc-x0-y0 >= 1]  + [move loc-x0-y2 loc-x1-y2 >= 1]  
+
+********************************************************************************
+********************************************************************************
+IN LAZY CONSTRAINT CALLBACK
+SEQ: 2
+START: 0
+NODE ID: 0
+INCUMBENT: 1e+75
+Z: 6
+F-BOUND: 6
+6 OPERATORS AVAILABLE: 
+	[1] (1) move loc-x0-y0 loc-x1-y0
+	[1] (1) move loc-x0-y1 loc-x0-y2
+	[1] (1) move loc-x0-y2 loc-x0-y1
+	[1] (1) move loc-x1-y0 loc-x0-y0
+	[1] (1) move loc-x1-y1 loc-x2-y1
+	[1] (1) move loc-x2-y1 loc-x2-y0
+OP COUNT IN CACHE? false
+SEQUENCIABLE? false
+LEARNED GLC WITH 5 BOUNDS:
+	[YT >= 7]
+	[move loc-x1-y2 loc-x0-y2 >= 1]
+	[move loc-x1-y1 loc-x1-y2 >= 1]
+	[move loc-x1-y1 loc-x0-y1 >= 1]
+	[move loc-x0-y0 loc-x0-y1 >= 1]
+REPEATED GLC? false
+
+Implied bound cuts: 0
+Zero-half cuts: 0
+Gomory fractional cuts: 1
+User cuts: 1
+CUT: 1 <= [YT >= 7]  + [move loc-x1-y2 loc-x0-y2 >= 1]  + [move loc-x1-y1 loc-x1-y2 >= 1]  + [move loc-x1-y1 loc-x0-y1 >= 1]  + [move loc-x0-y0 loc-x0-y1 >= 1]  
+
+********************************************************************************
+********************************************************************************
+IN LAZY CONSTRAINT CALLBACK
+SEQ: 3
+START: 0
+NODE ID: 0
+INCUMBENT: 1e+75
+Z: 6
+F-BOUND: 6
+6 OPERATORS AVAILABLE: 
+	[1] (1) move loc-x0-y1 loc-x0-y0
+	[1] (1) move loc-x0-y2 loc-x0-y1
+	[1] (1) move loc-x1-y1 loc-x1-y2
+	[1] (1) move loc-x1-y2 loc-x0-y2
+	[1] (1) move loc-x2-y0 loc-x2-y1
+	[1] (1) move loc-x2-y1 loc-x2-y0
+OP COUNT IN CACHE? false
+SEQUENCIABLE? false
+LEARNED GLC WITH 4 BOUNDS:
+	[YT >= 7]
+	[move loc-x1-y2 loc-x2-y2 >= 1]
+	[move loc-x1-y1 loc-x2-y1 >= 1]
+	[move loc-x1-y0 loc-x2-y0 >= 1]
+REPEATED GLC? false
+
+Implied bound cuts: 0
+Zero-half cuts: 1
+Gomory fractional cuts: 3
+User cuts: 2
+CUT: 1 <= [YT >= 7]  + [move loc-x1-y2 loc-x2-y2 >= 1]  + [move loc-x1-y1 loc-x2-y1 >= 1]  + [move loc-x1-y0 loc-x2-y0 >= 1]  
+
+********************************************************************************
+********************************************************************************
+IN LAZY CONSTRAINT CALLBACK
+SEQ: 4
+START: 0
+NODE ID: 0
+INCUMBENT: 1e+75
+Z: 6
+F-BOUND: 6
+6 OPERATORS AVAILABLE: 
+	[1] (1) move loc-x0-y0 loc-x0-y1
+	[1] (1) move loc-x0-y1 loc-x0-y2
+	[1] (1) move loc-x1-y0 loc-x0-y0
+	[1] (1) move loc-x1-y1 loc-x2-y1
+	[1] (1) move loc-x2-y0 loc-x1-y0
+	[1] (1) move loc-x2-y1 loc-x2-y0
+OP COUNT IN CACHE? false
+SEQUENCIABLE? true
+PLAN COST: 6
+PLAN:
+	(1) move loc-x1-y1 loc-x2-y1
+	(1) move loc-x2-y1 loc-x2-y0
+	(1) move loc-x2-y0 loc-x1-y0
+	(1) move loc-x1-y0 loc-x0-y0
+	(1) move loc-x0-y0 loc-x0-y1
+	(1) move loc-x0-y1 loc-x0-y2
+********************************************************************************
