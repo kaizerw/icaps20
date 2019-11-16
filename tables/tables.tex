@@ -1,0 +1,70 @@
+\documentclass[twoside,openright,cleardoubleempty,10pt,DIV14]{scrartcl}
+\usepackage[latin1]{inputenc}
+\usepackage[american,english]{babel} 
+\usepackage{times}
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage{enumerate}
+\usepackage{listings}
+\usepackage{euler}
+\usepackage[natbib,style=authoryear,maxcitenames=2,backend=bibtex8]{biblatex}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage[T1]{fontenc}
+\usepackage{rotating}
+\usepackage{etex}
+\usepackage{booktabs}
+\usepackage{tikz}
+\usetikzlibrary{decorations}
+\usetikzlibrary{decorations.pathreplacing}
+\usetikzlibrary{shapes,shapes.multipart,trees,matrix,calc,shadows}
+
+\usepackage[textsize=small]{todonotes}
+
+\def\theoremcounterhook{section}
+\usepackage{lecture}
+\usepackage{complexity}
+
+\definecolor{darkblue}{rgb}{0,0,.3}
+\usepackage[colorlinks,citecolor=darkblue,linkcolor=darkblue,bookmarks,plainpages=false,pdfpagelabels,pdftex]{hyperref}
+\usepackage{showlabels}
+
+\lstset{numbers=left,mathescape=true,language=Algo}
+
+\newif\ifdraft
+\drafttrue
+
+\makeindex
+
+\addbibresource{abbreviations,complexity,comments}
+
+\begin{document}
+\setcounter{page}{01}
+
+\title{MWRA}
+\author{}
+\date{}
+\maketitle
+
+%\tableofcontents
+\section{Tables}
+
+\providecommand\oursolver{OptSearch}
+
+\scriptsize
+
+\input{our_both_ignoring}
+\input{our_ignoring}
+\input{our_with_zero}
+\input{sat}
+\input{sat_both}
+  
+\end{document}
+% Local Variables:
+% auto-fill-function: do-auto-fill
+% ispell-local-dictionary: "english"
+% TeX-PDF-mode: t
+% fill-column: 110
+% mode-name: "LaTeX"
+% eval: (reftex-mode 1)
+% End:

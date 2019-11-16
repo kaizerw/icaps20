@@ -17,3 +17,4 @@ all = merge(sss,sat,by="instance",suffixes=c(".sss",".sat"))
 ## playground
 
 
+ggplot(data=subset(all,solved.sss==1&solved.sat==1))+geom_point(aes(x=planner_memory.sss,y=planner_memory.sat))+geom_abline()+scale_x_log10()+scale_y_log10()+labs(x="OptSearch",y="SAT")
