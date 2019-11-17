@@ -1,3 +1,8 @@
+library(tidyverse)
+library(xtable)
+library(readxl)
+library(ggplot2)
+
 ###############################################################################
 ## common functions
 ###############################################################################
@@ -34,7 +39,9 @@ read_results <-
       mutate(domain = str_replace(domain, 'T3_LMCUT/', '')) %>%
       mutate(domain = str_replace(domain, 'T3_HSTAR/', '')) %>%
       mutate(domain = str_replace(domain, '-selected', '')) %>%
-      mutate(domain = str_replace(domain, 'Summary', 'Total'))
+      mutate(domain = str_replace(domain, 'Summary', 'Total')) %>%
+      mutate(planner_memory = planner_memory / 1e3) %>%
+      mutate(mean_ops_by_constraint = mean_ops_by_constraint * 100)
   }
 
 read_all_results <- function(filename, sheet) {
@@ -50,21 +57,36 @@ read_all_results <- function(filename, sheet) {
     filter(instance != 'Total')
 }
 
+read_all_results_heuristics <- function(filename, sheet) {
+  dfs <- list()
+  
+  dfs[[1]] <- read_results(filename, sheet, 0, 4)
+  dfs[[2]] <- read_results(filename, sheet, 5, 10)
+  dfs[[3]] <- read_results(filename, sheet, 16, 5)
+  dfs[[4]] <- read_results(filename, sheet, 22, 6)
+  dfs[[5]] <- read_results(filename, sheet, 29, 10)
+  
+  bind_rows(dfs) %>%
+    rename(instance = domain) %>%
+    filter(instance != 'Total') %>%
+    mutate(instance = str_replace(instance, 'T3_BLIND/', '')) %>%
+    mutate(instance = str_replace(instance, 'T3_LMCUT/', '')) %>%
+    mutate(instance = str_replace(instance, 'T3_HSTAR/', '')) %>%
+    mutate(instance = str_replace(instance, 'SAT/', ''))
+}
+
 scatter_plot <-
   function(x,
            y,
-           x_min,
-           x_max,
-           y_min,
-           y_max,
+           f_min,
+           f_max,
            x_label = 'X',
            y_label = 'Y',
-           title = 'Plot') {
+           name = 'Plot') {
     df <- tibble(x = x, y = y)
     ggplot(df, aes(x, y)) +
-      xlim(x_min, x_max) + ylim(y_min, y_max) +
+      xlim(f_min, f_max) + ylim(f_min, f_max) +
       xlab(x_label) + ylab(y_label) +
-      ggtitle(title) +
       geom_abline(intercept = 0, slope = 1) +
       theme_minimal() +
       theme(
@@ -85,6 +107,41 @@ scatter_plot <-
         alpha = 0.3
       ) +
       coord_fixed()
-    ggsave(paste('figs/', title, '.pdf', sep = ""), family = 'Times')
+    ggsave(str_interp('figs/${name}.pdf'), family = 'Times')
   }
 
+save_table <-
+  function(df, caption, name, environment = 'table*') {
+    print(
+      xtable(
+        df,
+        digits = 2,
+        auto = TRUE,
+        caption = caption,
+        label = str_interp("tab:${name}")
+      ),
+      size = "small",
+      table.placement = "htbp",
+      include.rownames = FALSE,
+      floating.environment = environment,
+      file = str_interp("tabs/${name}.tex")
+    )
+  }
+
+transpose_df <- function(df) {
+  df %>%
+    gather(key = '', value = value, 2:ncol(df)) %>%
+    spread_(key = names(df)[1], value = 'value')
+}
+
+make_summary <- function(df, method) {
+  df <- df %>%
+    summarise(
+      method = method,
+      seqs = sum(seqs),
+      total_seq_time = mean(total_seq_time),
+      total_solve_time = mean(total_solve_time),
+      planner_memory = mean(planner_memory),
+      mean_ops_by_constraint = mean(mean_ops_by_constraint)
+    )
+}
