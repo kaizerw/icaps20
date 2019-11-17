@@ -5,65 +5,114 @@ library(ggplot2)
 
 ###############################################################################
 
-rows_to_keep <- function(){
-    c('instance', 'solved', 'seqs', 'restarts',
-      'total_astar_time', 'total_solve_time',
-      'planner_memory', 'mean_ops_by_constraint')
+rows_to_keep <- function() {
+  c(
+    'instance',
+    'solved',
+    'seqs',
+    'restarts',
+    'total_astar_time',
+    'total_solve_time',
+    'planner_memory',
+    'mean_ops_by_constraint'
+  )
 }
 
-read_results <- function(filename, sheet, n_rows_to_skip, n_rows_to_read) {
-    read_excel(filename, sheet = sheet, skip = n_rows_to_skip, 
+read_results <-
+  function(filename,
+           sheet,
+           n_rows_to_skip,
+           n_rows_to_read) {
+    read_excel(filename,
+               sheet = sheet,
+               skip = n_rows_to_skip,
                n_max = n_rows_to_read) %>%
-        as_tibble() %>%
-        select(rows_to_keep()) %>%
-        rename(domain = instance, total_seq_time = total_astar_time) %>%
-        mutate(domain = str_replace(domain, '-opt11-strips', '')) %>%
-        mutate(domain = str_replace(domain, 'SAT/', '')) %>%
-        mutate(domain = str_replace(domain, 'LMCUT_T3/', '')) %>%
-        mutate(domain = str_replace(domain, 'Summary', 'Total'))
-}
+      as_tibble() %>%
+      select(rows_to_keep()) %>%
+      rename(domain = instance, total_seq_time = total_astar_time) %>%
+      mutate(domain = str_replace(domain, '-opt11-strips', '')) %>%
+      mutate(domain = str_replace(domain, 'SAT/', '')) %>%
+      mutate(domain = str_replace(domain, 'LMCUT_T3/', '')) %>%
+      mutate(domain = str_replace(domain, 'T3_BLIND/', '')) %>%
+      mutate(domain = str_replace(domain, 'T3_LMCUT/', '')) %>%
+      mutate(domain = str_replace(domain, 'T3_HSTAR/', '')) %>%
+      mutate(domain = str_replace(domain, '-selected', '')) %>%
+      mutate(domain = str_replace(domain, 'Summary', 'Total'))
+  }
 
 read_all_results <- function(filename, sheet) {
-    n_rows_to_read <- 22
-    dfs <- list()
-    for (i in seq(0, 10)) {
-        n_rows_to_skip <- i * n_rows_to_read + i
-        dfs[[i + 1]] <- read_results(filename, sheet, n_rows_to_skip, 
-                                     n_rows_to_read)
-    }
-    bind_rows(dfs) %>% 
-        rename(instance = domain) %>%
-        filter(instance != 'Total')
+  n_rows_to_read <- 22
+  dfs <- list()
+  for (i in seq(0, 10)) {
+    n_rows_to_skip <- i * n_rows_to_read + i
+    dfs[[i + 1]] <- read_results(filename, sheet, n_rows_to_skip,
+                                 n_rows_to_read)
+  }
+  bind_rows(dfs) %>%
+    rename(instance = domain) %>%
+    filter(instance != 'Total')
 }
 
-scatter_plot <- function(x, y, x_label = 'X', y_label = 'Y', title = 'Plot') {
-    x_min <- min(x) - 1
-    x_max <- max(x) + 1
-    y_min <- min(y) - 1
-    y_max <- max(y) + 1
+scatter_plot <-
+  function(x,
+           y,
+           x_min,
+           x_max,
+           y_min,
+           y_max,
+           x_label = 'X',
+           y_label = 'Y',
+           title = 'Plot') {
     df <- tibble(x = x, y = y)
     ggplot(df, aes(x, y)) +
-        xlim(x_min, x_max) + ylim(y_min, y_max) +
-        xlab(x_label) + ylab(y_label) +
-        ggtitle(title) +
-        geom_abline(intercept = 0, slope = 1) +
-        theme_minimal() +
-        theme(panel.grid.major = element_blank(),
-              panel.grid.minor = element_blank(),
-              panel.background = element_rect(colour = "black", size = 1)) +
-        geom_point(size = 1, shape = 1, fill = "white", alpha = 1) +
-        geom_point(size = 1, shape = 16, fill = "black", alpha = 0.3) +
-        coord_fixed()
-    ggsave(paste('figs/', title, '.pdf', sep = ""), family = 'Times')    
-}
+      xlim(x_min, x_max) + ylim(y_min, y_max) +
+      xlab(x_label) + ylab(y_label) +
+      ggtitle(title) +
+      geom_abline(intercept = 0, slope = 1) +
+      theme_minimal() +
+      theme(
+        panel.grid.major = element_blank(),
+        panel.grid.minor = element_blank(),
+        panel.background = element_rect(colour = "black", size = 1)
+      ) +
+      geom_point(
+        size = 1,
+        shape = 1,
+        fill = "white",
+        alpha = 1
+      ) +
+      geom_point(
+        size = 1,
+        shape = 16,
+        fill = "black",
+        alpha = 0.3
+      ) +
+      coord_fixed()
+    ggsave(paste('figs/', title, '.pdf', sep = ""), family = 'Times')
+  }
 
-save_table <- function(df, caption, label, file) {
-  print(xtable(df, digits = 3, auto = TRUE, 
-               caption = caption,
-               label = label), 
-        include.rownames = FALSE,
-        floating.environment = "table*",
-        file = file)
+save_table <-
+  function(df, caption, label, file, environment = 'table*') {
+    print(
+      xtable(
+        df,
+        digits = 2,
+        auto = TRUE,
+        caption = caption,
+        label = label
+      ),
+      size = "small",
+      table.placement = "htbp",
+      include.rownames = FALSE,
+      floating.environment = environment,
+      file = file
+    )
+  }
+
+transpose_df <- function(df) {
+  df %>%
+    gather(key = '', value = value, 2:ncol(df)) %>%
+    spread_(key = names(df)[1], value = 'value')
 }
 
 
@@ -74,9 +123,13 @@ filename <- 'results/11_14/0_ignore_zero_cost_ops.xlsx'
 sss <- read_results(filename, 'Geral', 0, 12)
 sat <- read_results(filename, 'Geral', 14, 12)
 
-save_table(sss, '\\oursolver{} ignoring zero cost operators', 
-           'tab:our_ignoring', 'tables/our_ignoring.tex')
-save_table(sat, 'Our SAT implementation', 'tab:sat', 'tables/sat.tex')
+save_table(
+  sss,
+  '\\oursolver{} ignoring zero cost operators',
+  'tab:our_ignoring',
+  'tabs/our_ignoring.tex'
+)
+save_table(sat, 'Our SAT implementation', 'tab:sat', 'tabs/sat.tex')
 
 ###############################################################################
 
@@ -84,51 +137,291 @@ filename <- 'results/11_08/0B_landmarks_h+_seq.xlsx'
 
 sss <- read_results(filename, 'Geral', 0, 12)
 
-save_table(sss, '\\oursolver{} with zero cost operators', 
-           'tab:our_with_zero', 'tables/our_with_zero.tex')
+save_table(
+  sss,
+  '\\oursolver{} with zero cost operators',
+  'tab:our_with_zero',
+  'tabs/our_with_zero.tex'
+)
 
 ###############################################################################
 
+filename <- 'results/11_14/0_ignore_zero_cost_ops.xlsx'
 
 sss <- read_all_results(filename, 'LMCUT_T3')
 sat <- read_all_results(filename, 'SAT')
 
 sss_solved <- filter(sss, solved == 1)
 sat_solved <- filter(sat, solved == 1)
-solved_by_both <- sss_solved %>% 
+solved_by_both <- sss_solved %>%
   inner_join(sat_solved, by = "instance", suffix = c('.SSS', '.SAT')) %>%
   select(-solved.SSS, -solved.SAT, -restarts.SSS, -restarts.SAT)
 
-save_table(select(solved_by_both, instance, contains('.SSS')), 
-           '\\oursolver{}: instances solved by both (ignoring zero cost operators)', 
-           'tab:our_both_ignoring', 'tables/our_both_ignoring.tex')
+sss_solved <- select(solved_by_both, instance, contains('.SSS'))
+sat_solved <- select(solved_by_both, instance, contains('.SAT'))
 
-save_table(select(solved_by_both, instance, contains('.SAT')), 
-           'SAT instances: solved by both (ignoring zero cost operators)', 
-           'tab:sat_both', 'tables/sat_both.tex')
+sss_solved <- sss_solved %>%
+  rename_all( ~ stringr::str_replace_all(., '.SSS', ''))
+sat_solved <- sat_solved %>%
+  rename_all( ~ stringr::str_replace_all(., '.SAT', ''))
+
+save_table(
+  sss_solved,
+  '\\oursolver{}: instances solved by both (ignoring zero cost operators)',
+  'tab:our_both_ignoring',
+  'tabs/our_both_ignoring.tex'
+)
+
+save_table(
+  sat_solved,
+  'SAT instances: solved by both (ignoring zero cost operators)',
+  'tab:sat_both',
+  'tabs/sat_both.tex'
+)
 
 
 
-scatter_plot(solved_by_both$seqs.SSS, 
-             solved_by_both$seqs.SAT, 
-             x_label = 'seqs SSS', 
-             y_label = 'seqs SAT', 
-             title = 'seqs')
+sss_solved <- sss_solved %>%
+  summarise(
+    method = 'OpSearch',
+    seqs = sum(seqs),
+    total_seq_time = sum(total_seq_time),
+    total_solve_time = sum(total_solve_time),
+    planner_memory = mean(planner_memory),
+    mean_ops_by_constraint = mean(mean_ops_by_constraint)
+  )
 
-scatter_plot(solved_by_both$total_seq_time.SSS, 
-             solved_by_both$total_seq_time.SAT, 
-             x_label = 'total_seq_time SSS', 
-             y_label = 'total_seq_time SAT', 
-             title = 'total_seq_time')
+sat_solved <- sat_solved %>%
+  summarise(
+    method = 'SAT',
+    seqs = sum(seqs),
+    total_seq_time = sum(total_seq_time),
+    total_solve_time = sum(total_solve_time),
+    planner_memory = mean(planner_memory),
+    mean_ops_by_constraint = mean(mean_ops_by_constraint)
+  )
 
-scatter_plot(solved_by_both$planner_memory.SSS, 
-             solved_by_both$planner_memory.SAT, 
-             x_label = 'memory SSS', 
-             y_label = 'memory SAT', 
-             title = 'memory')
+summaries <- bind_rows(sss_solved, sat_solved) %>%
+  transpose_df()
+save_table(
+  summaries,
+  'Solved by both (ignoring zero cost operators)',
+  'tab:summary_both',
+  'tabs/summary_both.tex',
+  environment = 'table'
+)
 
-scatter_plot(solved_by_both$mean_ops_by_constraint.SSS, 
-             solved_by_both$mean_ops_by_constraint.SAT, 
-             x_label = 'mean_ops_by_constraint SSS', 
-             y_label = 'mean_ops_by_constraint SAT', 
-             title = 'mean_ops_by_constraint')
+
+
+solved_by_both <- solved_by_both %>%
+  filter(planner_memory.SSS < 500000, planner_memory.SAT < 500000)
+
+scatter_plot(
+  solved_by_both$seqs.SSS,
+  solved_by_both$seqs.SAT,
+  0,
+  700,
+  0,
+  700,
+  x_label = 'seqs SSS',
+  y_label = 'seqs SAT',
+  title = 'seqs'
+)
+
+scatter_plot(
+  solved_by_both$total_seq_time.SSS,
+  solved_by_both$total_seq_time.SAT,
+  0,
+  1000,
+  0,
+  1000,
+  x_label = 'total_seq_time SSS',
+  y_label = 'total_seq_time SAT',
+  title = 'total_seq_time'
+)
+
+scatter_plot(
+  solved_by_both$planner_memory.SSS,
+  solved_by_both$planner_memory.SAT,
+  50000,
+  350000,
+  50000,
+  350000,
+  x_label = 'memory SSS',
+  y_label = 'memory SAT',
+  title = 'memory'
+)
+
+scatter_plot(
+  solved_by_both$mean_ops_by_constraint.SSS,
+  solved_by_both$mean_ops_by_constraint.SAT,
+  -0.1,
+  0.8,-0.1,
+  0.8,
+  x_label = 'mean_ops_by_constraint SSS',
+  y_label = 'mean_ops_by_constraint SAT',
+  title = 'mean_ops_by_constraint'
+)
+
+###############################################################################
+
+filename_default <- 'results/11_14/1_emphasis_default_20m.xlsx'
+filename_bestbound <- 'results/11_14/1_emphasis_bestbound_20m.xlsx'
+
+default_sss <- read_results(filename_default, 'Geral', 0, 12)
+default_sat <- read_results(filename_default, 'Geral', 14, 12)
+
+best_bound_sss <- read_results(filename_bestbound, 'Geral', 0, 12)
+best_bound_sat <- read_results(filename_bestbound, 'Geral', 14, 12)
+
+save_table(
+  default_sss,
+  '\\oursolver{} with balanced emphasis',
+  'tab:default_our',
+  'tabs/default_our.tex'
+)
+save_table(default_sat,
+           'SAT with balanced emphasis',
+           'tab:default_sat',
+           'tabs/default_sat.tex')
+save_table(
+  best_bound_sss,
+  '\\oursolver{} with best bound emphasis',
+  'tab:best_bound_our',
+  'tabs/best_bound_our.tex'
+)
+save_table(
+  best_bound_sat,
+  'SAT with best bound emphasis',
+  'tab:best_bound_sat',
+  'tabs/best_bound_sat.tex'
+)
+
+scatter_plot(
+  default_sss$seqs,
+  best_bound_sss$seqs,
+  0,
+  70000,
+  0,
+  70000,
+  x_label = 'seqs SSS default emphasis',
+  y_label = 'seqs SSS best bound emphasis',
+  title = 'SSS_seqs'
+)
+
+scatter_plot(
+  default_sss$restarts,
+  best_bound_sss$restarts,
+  0,
+  70,
+  0,
+  70,
+  x_label = 'restarts SSS default emphasis',
+  y_label = 'restarts SSS best bound emphasis',
+  title = 'SSS_restarts'
+)
+
+scatter_plot(
+  default_sat$seqs,
+  best_bound_sat$seqs,
+  0,
+  30000,
+  0,
+  30000,
+  x_label = 'seqs SAT default emphasis',
+  y_label = 'seqs SAT best bound emphasis',
+  title = 'SAT_seqs'
+)
+
+scatter_plot(
+  default_sat$restarts,
+  best_bound_sat$restarts,
+  0,
+  25,
+  0,
+  25,
+  x_label = 'restarts SAT default emphasis',
+  y_label = 'restarts SAT best bound emphasis',
+  title = 'SAT_restarts'
+)
+
+###############################################################################
+
+filename <- 'results/11_14/6_selected_seq_landmarks_h+.xlsx'
+
+blind <- read_results(filename, 'Geral', 0, 7)
+lmcut <- read_results(filename, 'Geral', 8, 7)
+hstar <- read_results(filename, 'Geral', 16, 7)
+sat <- read_results(filename, 'Geral', 24, 7)
+
+save_table(
+  blind,
+  '\\oursolver{} with blind heuristic',
+  'tab:selected_blind',
+  'tabs/selected_blind.tex'
+)
+save_table(
+  lmcut,
+  '\\oursolver{} with LM-Cut heuristic',
+  'tab:selected_lmcut',
+  'tabs/selected_lmcut.tex'
+)
+save_table(
+  hstar,
+  '\\oursolver{} with \\hstar{} heuristic',
+  'tab:selected_hstar',
+  'tabs/selected_hstar.tex'
+)
+save_table(sat,
+           'Our SAT implementation',
+           'tab:selected_sat',
+           'tabs/selected_sat.tex')
+
+blind <- blind %>%
+  summarise(
+    heuristic = 'blind',
+    seqs = sum(seqs),
+    seq_time = sum(total_seq_time),
+    solve_time = sum(total_solve_time),
+    memory = mean(planner_memory),
+    cut_size = mean(mean_ops_by_constraint)
+  )
+lmcut <- lmcut %>%
+  summarise(
+    heuristic = 'lmcut',
+    seqs = sum(seqs),
+    seq_time = sum(total_seq_time),
+    solve_time = sum(total_solve_time),
+    memory = mean(planner_memory),
+    cut_size = mean(mean_ops_by_constraint)
+  )
+hstar <- hstar %>%
+  summarise(
+    heuristic = 'hstar',
+    seqs = sum(seqs),
+    seq_time = sum(total_seq_time),
+    solve_time = sum(total_solve_time),
+    memory = mean(planner_memory),
+    cut_size = mean(mean_ops_by_constraint)
+  )
+sat <- sat %>%
+  summarise(
+    heuristic = 'sat',
+    seqs = sum(seqs),
+    seq_time = sum(total_seq_time),
+    solve_time = sum(total_solve_time),
+    memory = mean(planner_memory),
+    cut_size = mean(mean_ops_by_constraint)
+  )
+
+summary <- bind_rows(blind, lmcut, hstar, sat) %>%
+  transpose_df()
+save_table(
+  summary,
+  'Comparison using different heuristic functions',
+  'tab:summary_heuristics',
+  'tabs/summary_heuristics.tex',
+  environment = 'table'
+)
+
+###############################################################################
