@@ -79,11 +79,20 @@ coverages <- tribble(~heuristic, ~coverage,
 #                    'hstar', hstar_summary[[6, 'solved']],
 #                    'sat', sat_summary[[6, 'solved']])
 
+new_names <- c("$C$" = "coverage",
+               "$S$" = "seqs",
+               "$S_t$" = "seq_time",
+               "$T_t$" = "solve_time",
+               "$S_t$" = "seq_time",
+               "$M$" = "memory",
+               "$\\overline{u}$" = "cut_size")
+
 #summaries <- bind_rows(solved_by_blind, solved_by_lmcut, solved_by_hstar, solved_by_sat) %>%
 summaries <- bind_rows(solved_by_blind, solved_by_lmcut, solved_by_hstar) %>%
   bind_cols(coverages) %>% 
   select(-heuristic1) %>%
-  transpose_df()
+  rename(!!!new_names)
+
 save_table(
   summaries,
   'Comparison using different heuristic functions',

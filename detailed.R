@@ -16,8 +16,17 @@ sat <- select(both, instance, contains('.SAT')) %>%
   rename_all( ~ str_replace_all(., '.SAT', '')) %>%
   make_summary('SAT')
 
+new_names <- c("$S$" = "seqs",
+               "$S_t$" = "total_seq_time",
+               "$T_t$" = "total_solve_time",
+               "$M$" = "planner_memory",
+               "$\\overline{u}$" = "mean_ops_by_constraint")
+
+df <- bind_rows(our, sat) %>%
+  rename(!!new_names)
+
 save_table(
-  bind_rows(our, sat) %>% transpose_df(),
+  df,
   'Solved by both',
   'summary_both',
   environment = 'table'

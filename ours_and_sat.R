@@ -5,13 +5,13 @@ filename <- 'results/11_14/0_ignore_zero_cost_ops.xlsx'
 our <- read_results(filename, 'Geral', 0, 12)
 sat <- read_results(filename, 'Geral', 14, 12)
 
-new_names <- c("C" = "solved",
-               "S" = "seqs",
-               "R" = "restarts",
-               "St" = "total_seq_time",
-               "T" = "total_solve_time",
-               "M" = "planner_memory",
-               "u" = "mean_ops_by_constraint")
+new_names <- c("$C$" = "solved",
+               "$S$" = "seqs",
+               "$R$" = "restarts",
+               "$S_t$" = "total_seq_time",
+               "$T_t$" = "total_solve_time",
+               "$M$" = "planner_memory",
+               "$\\overline{u}$" = "mean_ops_by_constraint")
 
 our <- our %>% rename(!!new_names)
 sat <- sat %>% rename(!!new_names)

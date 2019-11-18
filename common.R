@@ -115,7 +115,7 @@ scatter_plot <-
   }
 
 save_table <-
-  function(df, caption, name, environment = 'table*') {
+  function(df, caption, name, environment = 'table*', only.contents = F) {
     print(
       xtable(
         df,
@@ -127,16 +127,12 @@ save_table <-
       size = "small",
       table.placement = "htbp",
       include.rownames = FALSE,
+      only.contents = only.contents,
       floating.environment = environment,
+      sanitize.text.function = function(x) {x},
       file = str_interp("tabs/${name}.tex")
     )
   }
-
-transpose_df <- function(df) {
-  df %>%
-    gather(key = '', value = value, 2:ncol(df)) %>%
-    spread_(key = names(df)[1], value = 'value')
-}
 
 make_summary <- function(df, method) {
   df <- df %>%
