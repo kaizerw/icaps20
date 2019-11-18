@@ -41,7 +41,10 @@ read_results <-
       mutate(domain = str_replace(domain, '-selected', '')) %>%
       mutate(domain = str_replace(domain, 'Summary', 'Total')) %>%
       mutate(planner_memory = planner_memory / 1e3) %>%
-      mutate(mean_ops_by_constraint = mean_ops_by_constraint * 100)
+      mutate(mean_ops_by_constraint = mean_ops_by_constraint * 100) %>%
+      mutate(total_solve_time = as.integer(total_solve_time), 
+             planner_memory = as.integer(planner_memory), 
+             mean_ops_by_constraint = as.integer(mean_ops_by_constraint))
   }
 
 read_all_results <- function(filename, sheet) {
@@ -90,18 +93,19 @@ scatter_plot <-
       geom_abline(intercept = 0, slope = 1) +
       theme_minimal() +
       theme(
+        text = element_text(size = 25),
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
         panel.background = element_rect(colour = "black", size = 1)
       ) +
       geom_point(
-        size = 1,
+        size = 5,
         shape = 1,
         fill = "white",
         alpha = 1
       ) +
       geom_point(
-        size = 1,
+        size = 5,
         shape = 16,
         fill = "black",
         alpha = 0.3

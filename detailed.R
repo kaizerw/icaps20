@@ -11,7 +11,7 @@ both <- our %>%
 
 our <- select(both, instance, contains('.OUR')) %>% 
   rename_all( ~ str_replace_all(., '.OUR', '')) %>%
-  make_summary('OUR')
+  make_summary('OpSearch')
 sat <- select(both, instance, contains('.SAT')) %>%
   rename_all( ~ str_replace_all(., '.SAT', '')) %>%
   make_summary('SAT')
