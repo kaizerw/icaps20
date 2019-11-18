@@ -81,10 +81,10 @@ coverages <- tribble(~heuristic, ~coverage,
 
 new_names <- c("$C$" = "coverage",
                "$S$" = "seqs",
-               "$S_t$" = "seq_time",
-               "$T_t$" = "solve_time",
-               "$S_t$" = "seq_time",
-               "$M$" = "memory",
+               "$\\overline{S_t}$" = "seq_time",
+               "$\\overline{T_t}$" = "solve_time",
+               "$\\overline{S_t}$" = "seq_time",
+               "$\\overline{M}$" = "memory",
                "$\\overline{u}$" = "cut_size")
 
 #summaries <- bind_rows(solved_by_blind, solved_by_lmcut, solved_by_hstar, solved_by_sat) %>%

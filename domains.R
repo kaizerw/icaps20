@@ -25,26 +25,26 @@ others <- read_excel(filename, range = 'A1:AV12') %>%
   rename(domain = instance)
 
 new_names <- c("$zco$" = "any_zero_cost_ops",
-               "$c_{min}$" = "min_op_cost", 
-               "$c_{max}$" = "max_op_cost",
-               "$|V|$" = "variables",
-               "$|O|$" = "ops",
-               "$C^*$" = "optimal_plan_cost",
-               "$z_0$" = "initial_lp_solution",
-               "$r_0$" = "initial_lp_rows",
-               "$c_0$" = "initial_lp_cols")
+               "$\\overline{c_{min}}$" = "min_op_cost", 
+               "$\\overline{c_{max}}$" = "max_op_cost",
+               "$\\overline{|V|}$" = "variables",
+               "$\\overline{|O|}$" = "ops",
+               "$\\overline{C^*}$" = "optimal_plan_cost",
+               "$\\overline{z_0}$" = "initial_lp_solution",
+               "$\\overline{r_0}$" = "initial_lp_rows",
+               "$\\overline{c_0}$" = "initial_lp_cols")
 
 all <- bind_cols(cat_by_cost, h_init, lp_size, others) %>%
   select(-domain1, -domain2, -domain3, -all_unit_cost_ops) %>%
   mutate(any_zero_cost_ops = ifelse(any_zero_cost_ops == 20, 'YES', 'NO')) %>%
   mutate(min_op_cost = as.integer(min_op_cost), max_op_cost = as.integer(max_op_cost)) %>%
   rename(!!new_names) %>%
-  select(domain, "$|V|$", "$|O|$", "$zco$", "$c_{min}$", "$c_{max}$", 
-         "$C^*$", "$z_0$", "$r_0$", "$c_0$") %>%
+  select(domain, "$\\overline{|V|}$", "$\\overline{|O|}$", "$zco$", "$\\overline{c_{min}}$", "$\\overline{c_{max}}$", 
+         "$\\overline{C^*}$", "$\\overline{z_0}$", "$\\overline{r_0}$", "$\\overline{c_0}$") %>%
   arrange(domain)
 
-all1 <- all %>% select(domain, "$|V|$", "$|O|$", "$zco$", "$c_{min}$", "$c_{max}$")
-all2 <- all %>% select("$C^*$", "$z_0$", "$r_0$", "$c_0$")
+all1 <- all %>% select(domain, "$\\overline{|V|}$", "$\\overline{|O|}$", "$zco$", "$\\overline{c_{min}}$", "$\\overline{c_{max}}$")
+all2 <- all %>% select("$\\overline{C^*}$", "$\\overline{z_0}$", "$\\overline{r_0}$", "$\\overline{c_0}$")
 
 save_table(all1, '', 'domains1', environment = 'table', only.contents = T)
 save_table(all2, '', 'domains2', environment = 'table', only.contents = T)

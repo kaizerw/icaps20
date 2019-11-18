@@ -17,9 +17,9 @@ sat <- select(both, instance, contains('.SAT')) %>%
   make_summary('SAT')
 
 new_names <- c("$S$" = "seqs",
-               "$S_t$" = "total_seq_time",
-               "$T_t$" = "total_solve_time",
-               "$M$" = "planner_memory",
+               "$\\overline{S_t}$" = "total_seq_time",
+               "$\\overline{T_t}$" = "total_solve_time",
+               "$\\overline{M}$" = "planner_memory",
                "$\\overline{u}$" = "mean_ops_by_constraint")
 
 df <- bind_rows(our, sat) %>%

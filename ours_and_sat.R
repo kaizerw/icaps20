@@ -8,9 +8,9 @@ sat <- read_results(filename, 'Geral', 14, 12)
 new_names <- c("$C$" = "solved",
                "$S$" = "seqs",
                "$R$" = "restarts",
-               "$S_t$" = "total_seq_time",
-               "$T_t$" = "total_solve_time",
-               "$M$" = "planner_memory",
+               "$\\overline{S_t}$" = "total_seq_time",
+               "$\\overline{T_t}$" = "total_solve_time",
+               "$\\overline{M}$" = "planner_memory",
                "$\\overline{u}$" = "mean_ops_by_constraint")
 
 our <- our %>% rename(!!new_names)
