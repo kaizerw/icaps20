@@ -3,6 +3,7 @@ library(xtable)
 library(readxl)
 library(ggplot2)
 library(latex2exp)
+library(egg)
 
 ###############################################################################
 ## common functions
@@ -84,20 +85,22 @@ scatter_plot <-
            y,
            f_min,
            f_max,
-           x_label = 'X',
-           y_label = 'Y',
-           name = 'Plot') {
+           x_label = '',
+           y_label = '',
+           subtitle = '') {
     df <- tibble(x = x, y = y)
     ggplot(df, aes(x, y)) +
       xlim(f_min, f_max) + ylim(f_min, f_max) +
       xlab(x_label) + ylab(y_label) +
       geom_abline(intercept = 0, slope = 1) +
       theme_minimal() +
+      labs(subtitle = subtitle) +
       theme(
         text = element_text(size = 25),
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
-        panel.background = element_rect(colour = "black", size = 1)
+        panel.background = element_rect(colour = "black", size = 1),
+        plot.subtitle = element_text(hjust = 0.5)
       ) +
       geom_point(
         size = 5,
@@ -112,7 +115,6 @@ scatter_plot <-
         alpha = 0.3
       ) +
       coord_fixed()
-    ggsave(str_interp('figs/${name}.pdf'), family = 'Times')
   }
 
 save_table <-

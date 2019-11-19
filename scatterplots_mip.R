@@ -10,28 +10,19 @@ sat_bb <- read_all_results(filename_bb, 'SAT')
 
 seqs <- tibble(df = our_df$seqs, bb = our_bb$seqs) %>%
   filter(!is.na(df), !is.na(bb))
-scatter_plot(seqs$df, seqs$bb, 0, 6200,
-             x_label = TeX("$S$ default"),
-             y_label = TeX("$S$ best bound"),
-             name = 'opsearch_seqs')
-
-restarts <- tibble(df = our_df$restarts, bb = our_bb$restarts) %>%
-  filter(!is.na(df), !is.na(bb))
-scatter_plot(restarts$df, restarts$bb, 0, 10,
-             x_label = TeX("$R$ default"),
-             y_label = TeX("$R$ best bound"),
-             name = 'opsearch_restarts')
+g1 <- scatter_plot(seqs$df, seqs$bb, 0, 6200,
+             x_label = "default",
+             y_label = "best bound",
+             subtitle = 'OpSearch')
 
 seqs <- tibble(df = sat_df$seqs, bb = sat_bb$seqs) %>%
   filter(!is.na(df), !is.na(bb))
-scatter_plot(seqs$df, seqs$bb, 0, 3500,
-             x_label = TeX("$S$ default"),
-             y_label = TeX("$S$ best bound"),
-             name = 'sat_seqs')
+g2 <- scatter_plot(seqs$df, seqs$bb, 0, 3500,
+                   subtitle = 'OpSeq')
 
-restarts <- tibble(df = sat_df$restarts, bb = sat_bb$restarts) %>%
-  filter(!is.na(df), !is.na(bb))
-scatter_plot(restarts$df, restarts$bb, 0, 5,
-             x_label = TeX("$R$ default"),
-             y_label = TeX("$R$ best bound"),
-             name = 'sat_restarts')
+#ggsave('figs/opsearch_seqs.pdf', plot = g1, family = 'Times')
+#ggsave('figs/sat_seqs.pdf', plot = g2, family = 'Times')
+
+all <- ggarrange(g1, g2, nrow = 1)
+ggsave('figs/mip_scatter.pdf', plot = all, family = 'Times', 
+       width = 8, height = 4)
