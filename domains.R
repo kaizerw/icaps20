@@ -29,7 +29,7 @@ new_names <- c("$zco$" = "any_zero_cost_ops",
                "$\\overline{c_{max}}$" = "max_op_cost",
                "$\\overline{|V|}$" = "variables",
                "$\\overline{|O|}$" = "ops",
-               "$\\overline{C^*}$" = "optimal_plan_cost",
+               "$\\overline{lb}$" = "optimal_plan_cost",
                "$\\overline{z_0}$" = "initial_lp_solution",
                "$\\overline{r_0}$" = "initial_lp_rows",
                "$\\overline{c_0}$" = "initial_lp_cols")
@@ -40,11 +40,13 @@ all <- bind_cols(cat_by_cost, h_init, lp_size, others) %>%
   mutate(min_op_cost = as.integer(min_op_cost), max_op_cost = as.integer(max_op_cost)) %>%
   rename(!!new_names) %>%
   select(domain, "$\\overline{|V|}$", "$\\overline{|O|}$", "$zco$", "$\\overline{c_{min}}$", "$\\overline{c_{max}}$", 
-         "$\\overline{C^*}$", "$\\overline{z_0}$", "$\\overline{r_0}$", "$\\overline{c_0}$") %>%
+         "$\\overline{lb}$", "$\\overline{z_0}$", "$\\overline{r_0}$", "$\\overline{c_0}$") %>%
   arrange(domain)
 
-all1 <- all %>% select(domain, "$\\overline{|V|}$", "$\\overline{|O|}$", "$zco$", "$\\overline{c_{min}}$", "$\\overline{c_{max}}$")
-all2 <- all %>% select("$\\overline{C^*}$", "$\\overline{z_0}$", "$\\overline{r_0}$", "$\\overline{c_0}$")
+save_table(all, 'Informations by domain', 'domains')
 
-save_table(all1, '', 'domains1', environment = 'table', only.contents = T)
-save_table(all2, '', 'domains2', environment = 'table', only.contents = T)
+# all1 <- all %>% select(domain, "$\\overline{|V|}$", "$\\overline{|O|}$", "$zco$", "$\\overline{c_{min}}$", "$\\overline{c_{max}}$")
+# all2 <- all %>% select("$\\overline{lb}$", "$\\overline{z_0}$", "$\\overline{r_0}$", "$\\overline{c_0}$")
+
+# save_table(all1, '', 'domains1', environment = 'table', only.contents = T)
+# save_table(all2, '', 'domains2', environment = 'table', only.contents = T)

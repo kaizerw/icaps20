@@ -17,17 +17,17 @@ sat <- select(both, instance, contains('.SAT')) %>%
   make_summary('SAT')
 
 new_names <- c("$S$" = "seqs",
-               "$\\overline{S_t}$" = "total_seq_time",
-               "$\\overline{T_t}$" = "total_solve_time",
-               "$\\overline{M}$" = "planner_memory",
-               "$\\overline{u}$" = "mean_ops_by_constraint")
+               "$\\bar{S_t}$" = "total_seq_time",
+               "$\\bar{T_t}$" = "total_solve_time",
+               "$\\bar{M}$" = "planner_memory",
+               "$\\bar{u}$" = "mean_ops_by_constraint")
 
 df <- bind_rows(our, sat) %>%
   rename(!!new_names)
 
 save_table(
   df,
-  'Solved by both',
+  'Summary for instances solved by both methods',
   'summary_both',
   environment = 'table'
 )

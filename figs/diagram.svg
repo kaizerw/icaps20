@@ -14,7 +14,7 @@
    viewBox="0 0 298.32465 84.927848"
    version="1.1"
    id="svg8"
-   inkscape:version="0.92.4 (5da689c313, 2019-01-14)"
+   inkscape:version="0.92.3 (2405546, 2018-03-11)"
    sodipodi:docname="diagram.svg">
   <defs
      id="defs2">
@@ -66,11 +66,11 @@
      fit-margin-left="0"
      fit-margin-right="0"
      fit-margin-bottom="0"
-     inkscape:window-width="1366"
-     inkscape:window-height="705"
-     inkscape:window-x="-8"
-     inkscape:window-y="-8"
-     inkscape:window-maximized="1" />
+     inkscape:window-width="1920"
+     inkscape:window-height="1061"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="0" />
   <metadata
      id="metadata5">
     <rdf:RDF>
@@ -139,10 +139,10 @@
          y="90.497017"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Arial;-inkscape-font-specification:Arial;text-align:center;text-anchor:middle;stroke-width:0.26458332">Operator Counting</tspan><tspan
          sodipodi:role="line"
-         x="2.5395734"
+         x="2.5395732"
          y="98.434517"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:Arial;-inkscape-font-specification:Arial;text-align:center;text-anchor:middle;stroke-width:0.26458332"
-         id="tspan835">MIP Model</tspan></text>
+         id="tspan835">IP Model</tspan></text>
     <text
        id="text841"
        y="90.497017"
@@ -158,7 +158,7 @@
          y="98.434517"
          x="182.45625"
          sodipodi:role="line"
-         id="tspan845">SAT Model</tspan></text>
+         id="tspan845">Model</tspan></text>
     <path
        inkscape:connector-curvature="0"
        id="path851"

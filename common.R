@@ -2,6 +2,7 @@ library(tidyverse)
 library(xtable)
 library(readxl)
 library(ggplot2)
+library(latex2exp)
 
 ###############################################################################
 ## common functions
@@ -115,7 +116,7 @@ scatter_plot <-
   }
 
 save_table <-
-  function(df, caption, name, environment = 'table*', only.contents = F) {
+  function(df, caption, name, environment = 'table*', only.contents = F, size = NULL, hline.after = c(-1, 0, nrow(df))) {
     print(
       xtable(
         df,
@@ -124,9 +125,10 @@ save_table <-
         caption = caption,
         label = str_interp("tab:${name}")
       ),
-      size = "small",
+      size = size,
       table.placement = "htbp",
       include.rownames = FALSE,
+      hline.after = hline.after,
       only.contents = only.contents,
       floating.environment = environment,
       sanitize.text.function = function(x) {x},

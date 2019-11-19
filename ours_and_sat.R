@@ -8,14 +8,14 @@ sat <- read_results(filename, 'Geral', 14, 12)
 new_names <- c("$C$" = "solved",
                "$S$" = "seqs",
                "$R$" = "restarts",
-               "$\\overline{S_t}$" = "total_seq_time",
-               "$\\overline{T_t}$" = "total_solve_time",
-               "$\\overline{M}$" = "planner_memory",
-               "$\\overline{u}$" = "mean_ops_by_constraint")
+               "$\\bar{S_t}$" = "total_seq_time",
+               "$\\bar{T_t}$" = "total_solve_time",
+               "$\\bar{M}$" = "planner_memory",
+               "$\\bar{u}$" = "mean_ops_by_constraint")
 
 our <- our %>% rename(!!new_names)
 sat <- sat %>% rename(!!new_names)
 
-save_table(our, '\\oursolver{}', 'our', environment = 'table')
-save_table(sat, 'SAT approach',  'sat', environment = 'table')
-
+save_table(sat, 'OpSeq',         'sat', environment = 'table', only.contents = T, hline.after = c(-1, 0, nrow(sat) - 1, nrow(sat)))
+our <- select(our, -domain)
+save_table(our, '\\oursolver{}', 'our', environment = 'table', only.contents = T, hline.after = c(-1, 0, nrow(our) - 1, nrow(our)))
