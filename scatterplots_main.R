@@ -32,12 +32,6 @@ total_time <- tibble(our = our$total_solve_time, sat = sat$total_solve_time) %>%
 g5 <- scatter_plot(total_time$our, total_time$sat, 0, 3700,
              subtitle = TeX("$T_t$"))
 
-#ggsave('figs/seqs.pdf', plot = g1, family = 'Times')
-#ggsave('figs/memory.pdf', plot = g2, family = 'Times')
-#ggsave('figs/mean_ops_by_constraint.pdf', plot = g3, family = 'Times')
-#ggsave('figs/seqs_time.pdf', plot = g4, family = 'Times')
-#ggsave('figs/total_time.pdf', plot = g5, family = 'Times')
-
 all <- ggarrange(g1, g2, g3, g4, g5, nrow = 1)
 ggsave('figs/main_scatter.pdf', plot = all, family = 'Times', 
        width = 30, height = 6)
