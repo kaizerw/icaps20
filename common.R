@@ -44,8 +44,7 @@ read_results <-
       mutate(domain = str_replace(domain, 'Summary', 'Total')) %>%
       mutate(planner_memory = planner_memory / 1e3) %>%
       mutate(mean_ops_by_constraint = mean_ops_by_constraint * 100) %>%
-      mutate(total_solve_time = as.integer(total_solve_time), 
-             planner_memory = as.integer(planner_memory), 
+      mutate(planner_memory = as.integer(planner_memory), 
              mean_ops_by_constraint = as.integer(mean_ops_by_constraint))
   }
 
@@ -118,11 +117,11 @@ scatter_plot <-
   }
 
 save_table <-
-  function(df, caption, name, environment = 'table*', only.contents = F, size = NULL, hline.after = c(-1, 0, nrow(df))) {
+  function(df, caption, name, environment = 'table*', only.contents = F, size = NULL, hline.after = c(-1, 0, nrow(df)), digits = 2) {
     print(
       xtable(
         df,
-        digits = 2,
+        digits = digits,
         auto = TRUE,
         caption = caption,
         label = str_interp("tab:${name}")
@@ -134,7 +133,8 @@ save_table <-
       only.contents = only.contents,
       floating.environment = environment,
       sanitize.text.function = function(x) {x},
-      file = str_interp("tabs/${name}.tex")
+      file = str_interp("tabs/${name}.tex"),
+      fileEncoding="UTF-8"
     )
   }
 
@@ -148,4 +148,11 @@ make_summary <- function(df, method) {
       planner_memory = mean(planner_memory),
       mean_ops_by_constraint = mean(mean_ops_by_constraint)
     )
+}
+
+texttt <- function(x) {
+  if (str_detect(x, 'Total')) {
+    return(x);
+  }
+  str_interp("\\texttt{${x}}")
 }

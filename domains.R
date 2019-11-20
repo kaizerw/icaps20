@@ -1,7 +1,7 @@
 source('common.R')
 
 filename <- 'results/11_08/cat_by_cost.xlsx'
-cat_by_cost <- read_excel(filename, range = 'A1:E12')
+cat_by_cost <- read_excel(filename, range = 'A1:G12')
 
 filename <- 'results/11_14/3_initial_relaxation_values_1m.xlsx'
 h_init <- read_excel(filename, range = 'A1:O12') %>% 
@@ -24,29 +24,31 @@ others <- read_excel(filename, range = 'A1:AV12') %>%
   mutate(instance = str_replace(instance, '-opt11-strips', '')) %>%
   rename(domain = instance)
 
-new_names <- c("$zco$" = "any_zero_cost_ops",
-               "$\\overline{c_{min}}$" = "min_op_cost", 
-               "$\\overline{c_{max}}$" = "max_op_cost",
-               "$\\overline{|V|}$" = "variables",
-               "$\\overline{|O|}$" = "ops",
-               "$\\overline{lb}$" = "optimal_plan_cost",
-               "$\\overline{z_0}$" = "initial_lp_solution",
-               "$\\overline{r_0}$" = "initial_lp_rows",
-               "$\\overline{c_0}$" = "initial_lp_cols")
+new_names <- c("${\\scriptstyle zco}$" = "any_zero_cost_ops",
+               "${\\scriptstyle \\overline{c_{min}}}$" = "min_op_cost", 
+               "${\\scriptstyle \\overline{c_{max}}}$" = "max_op_cost",
+               "${\\scriptstyle c_{min}}$" = "min_cost", 
+               "${\\scriptstyle c_{max}}$" = "max_cost",
+               "${\\scriptstyle \\overline{|\\mathcal{V}|}}$" = "variables",
+               "${\\scriptstyle \\overline{|O|}}$" = "ops",
+               "${\\scriptstyle \\overline{lb}}$" = "optimal_plan_cost",
+               "${\\scriptstyle \\overline{z_0}}$" = "initial_lp_solution",
+               "${\\scriptstyle \\overline{r_0}}$" = "initial_lp_rows",
+               "${\\scriptstyle \\overline{c_0}}$" = "initial_lp_cols")
 
 all <- bind_cols(cat_by_cost, h_init, lp_size, others) %>%
   select(-domain1, -domain2, -domain3, -all_unit_cost_ops) %>%
-  mutate(any_zero_cost_ops = ifelse(any_zero_cost_ops == 20, 'YES', 'NO')) %>%
-  mutate(min_op_cost = as.integer(min_op_cost), max_op_cost = as.integer(max_op_cost)) %>%
+  mutate(any_zero_cost_ops = ifelse(any_zero_cost_ops == 20, '$\\checkmark$', '$-$')) %>%
+  mutate(min_op_cost = as.integer(min_op_cost), max_op_cost = as.integer(max_op_cost),
+         min_cost = as.integer(min_cost), max_cost = as.integer(max_cost)) %>%
   rename(!!new_names) %>%
-  select(domain, "$\\overline{|V|}$", "$\\overline{|O|}$", "$zco$", "$\\overline{c_{min}}$", "$\\overline{c_{max}}$", 
-         "$\\overline{lb}$", "$\\overline{z_0}$", "$\\overline{r_0}$", "$\\overline{c_0}$") %>%
-  arrange(domain)
+  select(domain, "${\\scriptstyle \\overline{|\\mathcal{V}|}}$", "${\\scriptstyle \\overline{|O|}}$", "${\\scriptstyle zco}$", 
+         "${\\scriptstyle \\overline{c_{min}}}$", "${\\scriptstyle \\overline{c_{max}}}$", "${\\scriptstyle c_{min}}$", "${\\scriptstyle c_{max}}$",
+         "${\\scriptstyle \\overline{lb}}$", "${\\scriptstyle \\overline{z_0}}$", "${\\scriptstyle \\overline{r_0}}$", 
+         "${\\scriptstyle \\overline{c_0}}$") %>%
+  arrange(domain) %>% 
+  mutate(domain = lapply(domain, FUN=texttt))
 
-save_table(all, 'Informations by domain', 'domains')
-
-# all1 <- all %>% select(domain, "$\\overline{|V|}$", "$\\overline{|O|}$", "$zco$", "$\\overline{c_{min}}$", "$\\overline{c_{max}}$")
-# all2 <- all %>% select("$\\overline{lb}$", "$\\overline{z_0}$", "$\\overline{r_0}$", "$\\overline{c_0}$")
-
-# save_table(all1, '', 'domains1', environment = 'table', only.contents = T)
-# save_table(all2, '', 'domains2', environment = 'table', only.contents = T)
+save_table(all, 'Information by domain.', 'domains',
+           only.contents = T,
+           digits = c(0, 0, 1, 1, 0, 0, 0, 0, 0, 2, 2, 1, 1))

@@ -25,4 +25,4 @@ g2 <- scatter_plot(seqs$df, seqs$bb, 0, 3500,
 
 all <- ggarrange(g1, g2, nrow = 1)
 ggsave('figs/mip_scatter.pdf', plot = all, family = 'Times', 
-       width = 8, height = 4)
+       width = 20, height = 10)

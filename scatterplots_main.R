@@ -40,4 +40,4 @@ g5 <- scatter_plot(total_time$our, total_time$sat, 0, 3700,
 
 all <- ggarrange(g1, g2, g3, g4, g5, nrow = 1)
 ggsave('figs/main_scatter.pdf', plot = all, family = 'Times', 
-       width = 16, height = 4)
+       width = 30, height = 6)
