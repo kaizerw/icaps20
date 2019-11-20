@@ -23,14 +23,8 @@ rows_to_keep <- function() {
 }
 
 read_results <-
-  function(filename,
-           sheet,
-           n_rows_to_skip,
-           n_rows_to_read) {
-    read_excel(filename,
-               sheet = sheet,
-               skip = n_rows_to_skip,
-               n_max = n_rows_to_read) %>%
+  function(filename, sheet, n_rows_to_skip, n_rows_to_read) {
+    read_excel(filename, sheet = sheet, skip = n_rows_to_skip, n_max = n_rows_to_read) %>%
       as_tibble() %>%
       select(rows_to_keep()) %>%
       rename(domain = instance, total_seq_time = total_astar_time) %>%
@@ -80,16 +74,9 @@ read_all_results_heuristics <- function(filename, sheet) {
 }
 
 scatter_plot <-
-  function(x,
-           y,
-           f_min,
-           f_max,
-           x_label = '',
-           y_label = '',
-           subtitle = '') {
-    df <- tibble(x = x, y = y)
+  function(x, y, x_label = '', y_label = '', subtitle = '') {
+    df <- tibble(x, y)
     ggplot(df, aes(x, y)) +
-      xlim(f_min, f_max) + ylim(f_min, f_max) +
       xlab(x_label) + ylab(y_label) +
       geom_abline(intercept = 0, slope = 1) +
       theme_minimal() +
@@ -101,31 +88,16 @@ scatter_plot <-
         panel.background = element_rect(colour = "black", size = 1),
         plot.subtitle = element_text(hjust = 0.5)
       ) +
-      geom_point(
-        size = 5,
-        shape = 1,
-        fill = "white",
-        alpha = 1
-      ) +
-      geom_point(
-        size = 5,
-        shape = 16,
-        fill = "black",
-        alpha = 0.3
-      ) +
+      geom_point(size = 5, shape = 1, fill = "white", alpha = 1) +
+      geom_point(size = 5, shape = 16, fill = "black", alpha = 0.3) +
       coord_fixed()
   }
 
 save_table <-
-  function(df, caption, name, environment = 'table*', only.contents = F, size = NULL, hline.after = c(-1, 0, nrow(df)), digits = 2) {
+  function(df, caption, name, environment = 'table*', only.contents = F, size = NULL, 
+           hline.after = c(-1, 0, nrow(df)), digits = 2) {
     print(
-      xtable(
-        df,
-        digits = digits,
-        auto = TRUE,
-        caption = caption,
-        label = str_interp("tab:${name}")
-      ),
+      xtable(df, digits = digits, auto = TRUE, caption = caption, label = str_interp("tab:${name}")),
       size = size,
       table.placement = "htbp",
       include.rownames = FALSE,

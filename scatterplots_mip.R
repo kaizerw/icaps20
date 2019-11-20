@@ -14,8 +14,7 @@ seqs_sat <- tibble(df = sat_df$seqs, bb = sat_bb$seqs, type = 'OpSeq') %>%
   filter(!is.na(df), !is.na(bb))
 all <- bind_rows(seqs_our, seqs_sat)
 
-all <- ggplot(all, aes(df, bb)) +
-  xlim(0, 6200) + ylim(0, 6200) +
+all <- ggplot(all, aes(log2(df), log2(bb))) +
   xlab('default') + ylab('best bound') +
   geom_abline(intercept = 0, slope = 1) +
   theme_minimal() +
@@ -34,11 +33,11 @@ ggsave('figs/mip_scatter1.pdf', plot = all, family = 'Times',
        width = 20, height = 10)
 
 
-g1 <- scatter_plot(seqs_our$df, seqs_our$bb, 0, 6200,
+g1 <- scatter_plot(log2(seqs_our$df), log2(seqs_our$bb),
              x_label = "default",
              y_label = "best bound",
              subtitle = 'OpSearch')
-g2 <- scatter_plot(seqs_sat$df, seqs_sat$bb, 0, 3500,
+g2 <- scatter_plot(log2(seqs_sat$df), log2(seqs_sat$bb),
                    subtitle = 'OpSeq')
 
 all <- ggarrange(g1, g2, nrow = 1)

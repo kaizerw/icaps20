@@ -7,29 +7,29 @@ sat <- read_all_results(filename, 'SAT')
 
 seqs <- tibble(our = our$seqs, sat = sat$seqs) %>%
   filter(!is.na(our), !is.na(sat))
-g1 <- scatter_plot(seqs$our, seqs$sat, 0, 6000,
+g1 <- scatter_plot(log2(seqs$our), log2(seqs$sat),
              y_label = 'OpSeq',
              subtitle = TeX("$S$"))
 
 planner_memory <- tibble(our = our$planner_memory, sat = sat$planner_memory) %>%
   filter(!is.na(our), !is.na(sat))
-g2 <- scatter_plot(planner_memory$our, planner_memory$sat, 0, 4200,
+g2 <- scatter_plot(log2(planner_memory$our), log2(planner_memory$sat),
              subtitle = TeX("$M$"))
 
 mean_ops_by_constraint <- tibble(our = our$mean_ops_by_constraint, sat = sat$mean_ops_by_constraint) %>%
   filter(!is.na(our), !is.na(sat))
-g3 <- scatter_plot(mean_ops_by_constraint$our, mean_ops_by_constraint$sat, 0, 71,
+g3 <- scatter_plot(log2(mean_ops_by_constraint$our), log2(mean_ops_by_constraint$sat), 
              x_label = 'OpSearch',
              subtitle = TeX("$\\bar{u}$"))
 
 seqs_time <- tibble(our = our$total_seq_time, sat = sat$total_seq_time) %>%
   filter(!is.na(our), !is.na(sat))
-g4 <- scatter_plot(seqs_time$our, seqs_time$sat, 0, 3000,
+g4 <- scatter_plot(log2(seqs_time$our), log2(seqs_time$sat),
              subtitle = TeX("$S_t$"))
 
 total_time <- tibble(our = our$total_solve_time, sat = sat$total_solve_time) %>%
   filter(!is.na(our), !is.na(sat))
-g5 <- scatter_plot(total_time$our, total_time$sat, 0, 3700,
+g5 <- scatter_plot(log2(total_time$our), log2(total_time$sat), 
              subtitle = TeX("$T_t$"))
 
 all <- ggarrange(g1, g2, g3, g4, g5, nrow = 1)
