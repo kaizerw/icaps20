@@ -28,7 +28,7 @@ all <- ggplot(all, aes(log2(df), log2(bb))) +
   geom_point(size = 5, shape = 1, fill = "white", alpha = 1) +
   geom_point(size = 5, shape = 16, fill = "black", alpha = 0.3) +
   facet_wrap(~type, scales = "fixed") +
-  coord_fixed()
+  coord_fixed() + xlim(0, 12) + ylim(0, 12)
 ggsave('figs/mip_scatter1.pdf', plot = all, family = 'Times', 
        width = 20, height = 10)
 
@@ -36,9 +36,9 @@ ggsave('figs/mip_scatter1.pdf', plot = all, family = 'Times',
 g1 <- scatter_plot(log2(seqs_our$df), log2(seqs_our$bb),
              x_label = "default",
              y_label = "best bound",
-             subtitle = 'OpSearch')
+             subtitle = 'OpSearch') + xlim(0, 12) + ylim(0, 12)
 g2 <- scatter_plot(log2(seqs_sat$df), log2(seqs_sat$bb),
-                   subtitle = 'OpSeq')
+                   subtitle = 'OpSeq') + xlim(0, 12) + ylim(0, 12)
 
 all <- ggarrange(g1, g2, nrow = 1)
 ggsave('figs/mip_scatter2.pdf', plot = all, family = 'Times', 
