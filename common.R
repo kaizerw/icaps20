@@ -74,7 +74,7 @@ read_all_results_heuristics <- function(filename, sheet) {
 }
 
 scatter_plot <-
-  function(x, y, x_label = '', y_label = '', subtitle = '') {
+  function(x, y, x_label = '', y_label = '', subtitle = '', fontsize = 25) {
     df <- tibble(x, y)
     ggplot(df, aes(x, y)) +
       xlab(x_label) + ylab(y_label) +
@@ -82,7 +82,8 @@ scatter_plot <-
       theme_minimal() +
       labs(subtitle = subtitle) +
       theme(
-        text = element_text(size = 25),
+        text = element_text(size = fontsize, color = 'black'),
+        axis.text = element_text(color = 'black'),
         panel.grid.major = element_blank(),
         panel.grid.minor = element_blank(),
         panel.background = element_rect(colour = "black", size = 1),

@@ -19,27 +19,29 @@ all <- ggplot(all, aes(log2(df), log2(bb))) +
   geom_abline(intercept = 0, slope = 1) +
   theme_minimal() +
   theme(
-    text = element_text(size = 25),
+    text = element_text(size = 110),
+    axis.text = element_text(color = 'black'),
     panel.grid.major = element_blank(),
     panel.grid.minor = element_blank(),
     panel.background = element_rect(colour = "black", size = 1),
-    plot.subtitle = element_text(hjust = 0.5)
+    plot.subtitle = element_text(hjust = 0.5),
+    panel.spacing = unit(20, "lines")
   ) +
   geom_point(size = 5, shape = 1, fill = "white", alpha = 1) +
   geom_point(size = 5, shape = 16, fill = "black", alpha = 0.3) +
   facet_wrap(~type, scales = "fixed") +
   coord_fixed() + xlim(0, 12) + ylim(0, 12)
-ggsave('figs/mip_scatter1.pdf', plot = all, family = 'Times', 
-       width = 20, height = 10)
+ggsave('figs/mip_scatter.pdf', plot = all, family = 'Times', 
+       width = 35, height = 15)
 
 
-g1 <- scatter_plot(log2(seqs_our$df), log2(seqs_our$bb),
-             x_label = "default",
-             y_label = "best bound",
-             subtitle = 'OpSearch') + xlim(0, 12) + ylim(0, 12)
-g2 <- scatter_plot(log2(seqs_sat$df), log2(seqs_sat$bb),
-                   subtitle = 'OpSeq') + xlim(0, 12) + ylim(0, 12)
+#g1 <- scatter_plot(log2(seqs_our$df), log2(seqs_our$bb),
+#             x_label = "default",
+#             y_label = "best bound",
+#             subtitle = 'OpSearch') + xlim(0, 12) + ylim(0, 12)
+#g2 <- scatter_plot(log2(seqs_sat$df), log2(seqs_sat$bb),
+#                   subtitle = 'OpSeq') + xlim(0, 12) + ylim(0, 12)
 
-all <- ggarrange(g1, g2, nrow = 1)
-ggsave('figs/mip_scatter2.pdf', plot = all, family = 'Times', 
-       width = 20, height = 10)
+#all <- ggarrange(g1, g2, nrow = 1)
+#ggsave('figs/mip_scatter2.pdf', plot = all, family = 'Times', 
+#       width = 20, height = 10)

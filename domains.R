@@ -43,7 +43,7 @@ all <- bind_cols(cat_by_cost, h_init, lp_size, others) %>%
          min_cost = as.integer(min_cost), max_cost = as.integer(max_cost)) %>%
   rename(!!new_names) %>%
   select(domain, "${\\scriptstyle \\overline{|\\mathcal{V}|}}$", "${\\scriptstyle \\overline{|O|}}$", "${\\scriptstyle zco}$", 
-         "${\\scriptstyle \\overline{c_{min}}}$", "${\\scriptstyle \\overline{c_{max}}}$", "${\\scriptstyle c_{min}}$", "${\\scriptstyle c_{max}}$",
+         "${\\scriptstyle \\overline{c_{min}}}$", "${\\scriptstyle \\overline{c_{max}}}$",
          "${\\scriptstyle \\overline{lb}}$", "${\\scriptstyle \\overline{z_0}}$", "${\\scriptstyle \\overline{r_0}}$", 
          "${\\scriptstyle \\overline{c_0}}$") %>%
   arrange(domain) %>% 
@@ -51,4 +51,4 @@ all <- bind_cols(cat_by_cost, h_init, lp_size, others) %>%
 
 save_table(all, 'Information by domain.', 'domains',
            only.contents = T,
-           digits = c(0, 0, 1, 1, 0, 0, 0, 0, 0, 2, 2, 1, 1))
+           digits = c(0, 0, 1, 1, 0, 0, 0, 2, 2, 1, 1))
