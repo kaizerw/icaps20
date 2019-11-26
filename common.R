@@ -36,6 +36,8 @@ read_results <-
       mutate(domain = str_replace(domain, 'T3_HSTAR/', '')) %>%
       mutate(domain = str_replace(domain, '-selected', '')) %>%
       mutate(domain = str_replace(domain, 'Summary', 'Total')) %>%
+      mutate(domain = str_replace(domain, 'blind/', '')) %>%
+      mutate(domain = str_replace(domain, 'oc_seq_landmarks/', '')) %>%
       mutate(planner_memory = planner_memory / 1e3) %>%
       mutate(mean_ops_by_constraint = mean_ops_by_constraint * 100) %>%
       mutate(planner_memory = as.integer(planner_memory), 
