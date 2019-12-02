@@ -33,21 +33,23 @@ solved_by_blind <- make_summary(solved_by_blind, 'blind') %>% rename(heuristic =
 solved_by_lmcut <- make_summary(solved_by_lmcut, 'lmcut') %>% rename(heuristic = method)
 solved_by_oc <- make_summary(solved_by_oc, 'oc') %>% rename(heuristic = method)
 
-new_names <- c("$C$" = "coverage",
-               "$S$" = "seqs",
-               "$\\bar{S_t}$" = "total_seq_time",
-               "$\\bar{T_t}$" = "total_solve_time",
-               "$\\bar{M}$" = "planner_memory",
-               "$\\bar{u}$" = "mean_ops_by_constraint")
+new_names <- c("${\\scriptstyle C}$" = "coverage",
+               "${\\scriptstyle S}$" = "seqs",
+               "${\\scriptstyle \\bar{S_t}}$" = "total_seq_time",
+               "${\\scriptstyle \\bar{T_t}}$" = "total_solve_time",
+               "${\\scriptstyle \\bar{M}}$" = "planner_memory",
+               "${\\scriptstyle \\bar{u}}$" = "mean_ops_by_constraint")
 
 summaries <- bind_rows(solved_by_blind, solved_by_lmcut, solved_by_oc) %>%
   bind_cols(coverages) %>% 
   select(-heuristic1) %>%
-  rename(!!!new_names)
+  rename(!!!new_names) %>%
+  select(-"${\\scriptstyle C}$", -"${\\scriptstyle \\bar{S_t}}$")
 
 save_table(
   summaries,
   'Comparison using different heuristic functions',
   'summary_heuristics2',
-  environment = 'table'
+  environment = 'table',
+  only.contents = T
 )
