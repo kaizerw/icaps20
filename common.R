@@ -38,6 +38,8 @@ read_results <-
       mutate(domain = str_replace(domain, 'Summary', 'Total')) %>%
       mutate(domain = str_replace(domain, 'blind/', '')) %>%
       mutate(domain = str_replace(domain, 'oc_seq_landmarks/', '')) %>%
+      mutate(domain = str_replace(domain, 'lmcut/', '')) %>%
+      mutate(domain = str_replace(domain, 'hstar/', '')) %>%
       mutate(planner_memory = planner_memory / 1e3) %>%
       mutate(mean_ops_by_constraint = mean_ops_by_constraint * 100) %>%
       mutate(planner_memory = as.integer(planner_memory), 
@@ -73,6 +75,27 @@ read_all_results_heuristics <- function(filename, sheet) {
     mutate(instance = str_replace(instance, 'T3_LMCUT/', '')) %>%
     mutate(instance = str_replace(instance, 'T3_HSTAR/', '')) %>%
     mutate(instance = str_replace(instance, 'SAT/', ''))
+}
+
+read_all_results_heuristics2 <- function(filename, sheet) {
+  dfs <- list()
+  
+  indices <- c(1, 16, 20, 28, 35, 40, 48, 56, 71, 86, 91, 149, 182, 186, 193, 204, 212, 220, 226, 230, 
+               235, 280, 288, 295, 304, 310, 320, 328, 340, 346, 351, 357, 368, 373, 378, 388)
+  
+  for (i in seq(1, length(indices) - 1)) {
+    n_rows_to_read <- indices[i + 1] - indices[i] - 1
+    dfs[[i + 1]] <- read_results(filename, sheet, indices[i] - 1, n_rows_to_read)
+  }
+
+  bind_rows(dfs) %>%
+    rename(instance = domain) %>%
+    filter(instance != 'Total') %>%
+    mutate(instance = str_replace(instance, 'blind/', '')) %>%
+    mutate(instance = str_replace(instance, 'lmcut/', '')) %>%
+    mutate(instance = str_replace(instance, 'oc_seq_landmarks/', '')) %>%
+    mutate(instance = str_replace(instance, 'hstar/', '')) %>%
+    mutate(instance = str_replace(instance, '-hstar', ''))
 }
 
 scatter_plot <-
