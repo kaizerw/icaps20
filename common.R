@@ -99,7 +99,7 @@ read_all_results_heuristics2 <- function(filename, sheet) {
 }
 
 scatter_plot <-
-  function(x, y, x_label = '', y_label = '', subtitle = '', fontsize = 25) {
+  function(x, y, x_label = '', y_label = '', subtitle = '', fontsize = 25, pointsize = 5) {
     df <- tibble(x, y)
     ggplot(df, aes(x, y)) +
       xlab(x_label) + ylab(y_label) +
@@ -114,8 +114,8 @@ scatter_plot <-
         panel.background = element_rect(colour = "black", size = 1),
         plot.subtitle = element_text(hjust = 0.5)
       ) +
-      geom_point(size = 5, shape = 1, fill = "white", alpha = 1) +
-      geom_point(size = 5, shape = 16, fill = "black", alpha = 0.3) +
+      geom_point(size = pointsize, shape = 1, fill = "white", alpha = 1) +
+      geom_point(size = pointsize, shape = 16, fill = "black", alpha = 0.3) +
       coord_fixed()
   }
 

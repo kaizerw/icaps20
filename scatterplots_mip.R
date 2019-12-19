@@ -19,7 +19,7 @@ all <- ggplot(all, aes(log2(df), log2(bb))) +
   geom_abline(intercept = 0, slope = 1) +
   theme_minimal() +
   theme(
-    text = element_text(size = 110),
+    text = element_text(size = 80),
     axis.text = element_text(color = 'black'),
     panel.grid.major = element_blank(),
     panel.grid.minor = element_blank(),
@@ -27,8 +27,8 @@ all <- ggplot(all, aes(log2(df), log2(bb))) +
     plot.subtitle = element_text(hjust = 0.5),
     panel.spacing = unit(20, "lines")
   ) +
-  geom_point(size = 5, shape = 1, fill = "white", alpha = 1) +
-  geom_point(size = 5, shape = 16, fill = "black", alpha = 0.3) +
+  geom_point(size = 15, shape = 1, fill = "white", alpha = 1) +
+  geom_point(size = 15, shape = 16, fill = "black", alpha = 0.3) +
   facet_wrap(~type, scales = "fixed") +
   coord_fixed() + xlim(0, 12) + ylim(0, 12)
 ggsave('figs/mip_scatter.pdf', plot = all, family = 'Times', 

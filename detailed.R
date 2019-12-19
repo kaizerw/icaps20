@@ -26,7 +26,8 @@ new_names <- c("${\\scriptstyle S}$" = "seqs",
 df <- bind_rows(our, sat) %>%
   mutate(perc = total_seq_time / total_solve_time * 100) %>%
   rename(!!new_names) %>%
-  select(-"${\\scriptstyle \\bar{S_t}}$", -"${\\scriptstyle \\bar{T_t}}$")
+  select(-"${\\scriptstyle \\bar{S_t}}$", -"${\\scriptstyle \\bar{T_t}}$") %>%
+  rename(" "="method")
 
 save_table(
   df,

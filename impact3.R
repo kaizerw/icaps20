@@ -49,7 +49,8 @@ summaries <- bind_rows(solved_by_blind, solved_by_lmcut, solved_by_oc, solved_by
   bind_cols(coverages) %>% 
   select(-heuristic1) %>%
   rename(!!!new_names) %>%
-  select(-"${\\scriptstyle \\bar{S_t}}$")
+  select(-"${\\scriptstyle \\bar{S_t}}$") %>%
+  rename(" "="heuristic")
 
 save_table(
   summaries,

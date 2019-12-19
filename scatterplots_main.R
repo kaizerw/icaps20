@@ -9,29 +9,32 @@ seqs <- tibble(our = our$seqs, sat = sat$seqs) %>%
   filter(!is.na(our), !is.na(sat))
 g1 <- scatter_plot(log2(seqs$our), log2(seqs$sat),
              y_label = 'OpSeq',
-             subtitle = TeX("$S$"), fontsize = 60) + xlim(0, 13) + ylim(0, 13)
+             subtitle = TeX("$S$"), fontsize = 60, pointsize=15) + xlim(0, 13) + ylim(0, 13)
 
 planner_memory <- tibble(our = our$planner_memory, sat = sat$planner_memory) %>%
   filter(!is.na(our), !is.na(sat))
 g2 <- scatter_plot(log2(planner_memory$our), log2(planner_memory$sat),
-             subtitle = TeX("$M$"), fontsize = 60) + xlim(6, 13) + ylim(6, 13)
+             subtitle = TeX("$M$"), fontsize = 60, pointsize=15) + xlim(6, 13) + ylim(6, 13)
 
 mean_ops_by_constraint <- tibble(our = our$mean_ops_by_constraint, sat = sat$mean_ops_by_constraint) %>%
   filter(!is.na(our), !is.na(sat))
 g3 <- scatter_plot(log2(mean_ops_by_constraint$our), log2(mean_ops_by_constraint$sat), 
              x_label = 'OpSearch',
-             subtitle = TeX("$\\bar{u}$"), fontsize = 60)
+             subtitle = TeX("$\\bar{u}$"), fontsize = 60, pointsize=15)
 
 seqs_time <- tibble(our = our$total_seq_time, sat = sat$total_seq_time) %>%
   filter(!is.na(our), !is.na(sat))
 g4 <- scatter_plot(log2(seqs_time$our), log2(seqs_time$sat),
-             subtitle = TeX("$S_t$"), fontsize = 60) + xlim(-15, 10) + ylim(-15, 10)
+             subtitle = TeX("$S_t$"), fontsize = 60, pointsize=15) + xlim(-15, 10) + ylim(-15, 10)
 
 total_time <- tibble(our = our$total_solve_time, sat = sat$total_solve_time) %>%
   filter(!is.na(our), !is.na(sat))
 g5 <- scatter_plot(log2(total_time$our), log2(total_time$sat), 
-             subtitle = TeX("$T_t$"), fontsize = 60) + xlim(-8, 13) + ylim(-8, 13)
+             subtitle = TeX("$T_t$"), fontsize = 60, pointsize=15) + xlim(-8, 13) + ylim(-8, 13)
+
+ggsave('figs/main_scatter_1.pdf', plot = ggarrange(g1, g2, nrow = 1), family = 'Times', width = 35, height = 15)
+ggsave('figs/main_scatter_2.pdf', plot = ggarrange(g3, g4, nrow = 1), family = 'Times', width = 35, height = 15)
+ggsave('figs/main_scatter_3.pdf', plot = g5, family = 'Times', width = 20, height = 15)
 
 all <- ggarrange(g1, g2, g3, g4, g5, nrow = 1)
-ggsave('figs/main_scatter.pdf', plot = all, family = 'Times', 
-       width = 38, height = 8)
+ggsave('figs/main_scatter.pdf', plot = all, family = 'Times', width = 38, height = 8)
