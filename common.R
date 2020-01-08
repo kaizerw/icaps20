@@ -23,7 +23,7 @@ rows_to_keep <- function() {
 }
 
 read_results <-
-  function(filename, sheet, n_rows_to_skip, n_rows_to_read) {
+  function(filename, sheet, n_rows_to_skip, n_rows_to_read, rows_to_keep = rows_to_keep) {
     read_excel(filename, sheet = sheet, skip = n_rows_to_skip, n_max = n_rows_to_read) %>%
       as_tibble() %>%
       select(rows_to_keep()) %>%
@@ -141,6 +141,7 @@ make_summary <- function(df, method) {
     summarise(
       method = method,
       seqs = sum(seqs),
+      restarts = sum(restarts),
       total_seq_time = mean(total_seq_time),
       total_solve_time = mean(total_solve_time),
       planner_memory = mean(planner_memory),

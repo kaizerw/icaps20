@@ -7,7 +7,7 @@ sat <- read_all_results(filename, 'SAT')      %>% filter(solved == 1)
 
 both <- our %>%
   inner_join(sat, by = "instance", suffix = c('.OUR', '.SAT')) %>%
-  select(-solved.OUR, -solved.SAT, -restarts.OUR, -restarts.SAT)
+  select(-solved.OUR, -solved.SAT)
 
 our <- select(both, instance, contains('.OUR')) %>% 
   rename_all( ~ str_replace_all(., '.OUR', '')) %>%
@@ -17,6 +17,7 @@ sat <- select(both, instance, contains('.SAT')) %>%
   make_summary('OpSeq')
 
 new_names <- c("${\\scriptstyle S}$" = "seqs",
+               "${\\scriptstyle R}$" = "restarts",
                "${\\scriptstyle \\bar{S_t}}$" = "total_seq_time",
                "${\\scriptstyle \\bar{T_t}}$" = "total_solve_time",
                "${\\scriptstyle \\bar{p}}$" = "perc",
@@ -26,7 +27,7 @@ new_names <- c("${\\scriptstyle S}$" = "seqs",
 df <- bind_rows(our, sat) %>%
   mutate(perc = total_seq_time / total_solve_time * 100) %>%
   rename(!!new_names) %>%
-  select(-"${\\scriptstyle \\bar{S_t}}$", -"${\\scriptstyle \\bar{T_t}}$") %>%
+  select(-"${\\scriptstyle \\bar{S_t}}$") %>%
   rename(" "="method")
 
 save_table(
@@ -35,5 +36,5 @@ save_table(
   'summary_both',
   environment = 'table',
   only.contents = T,
-  digits = c(0, 0, 0, 0, 0, 1)
+  digits = c(0, 0, 0, 0, 0, 0, 0, 1)
 )

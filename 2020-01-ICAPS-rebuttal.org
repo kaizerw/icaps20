@@ -1,0 +1,308 @@
+#+Title: Rebuttal ICAPS 2020
+#+Author: Marcus Ritt
+#+Date: <2020-01-08 qua>
+#+Id: $Id$
+#+Revision: $Rev$
+#+LaTeX_CLASS_OPTIONS: [koma,DIV=15,10pt,a4]
+#+LaTeX_HEADER: \usepackage[margin=0.5in]{geometry}
+
+* Review 1 (weak accept)
+
+  #+BEGIN_QUOTE
+  This paper revisits the incremental lower-bounding procedure by Davies et al which is based on generating operator counts from a MIP model and attempting to sequence the generated counts into a plan, but substitutes the SAT-based formulation of the sequencing subproblem used by Davies et al with a state-space search. This is shown to solve more problems than the SAT-based sequencing method in some domains, while solving fewer in others. The paper makes a somewhat narrow, but interesting, technical contribution.
+  #+END_QUOTE
+
+  Detailed comments:
+
+  #+BEGIN_QUOTE
+  Page 3, Section "Generalized Landmarks", last paragraph: "(2) e (3)" should be "(2) _and_ (3)".
+  #+END_QUOTE
+
+  Ok, easy fix, not relevant now.
+
+  #+BEGIN_QUOTE
+  Page 4, Section "Extended State and ...", last sentence: "No state is generated from [...] o_4 since it is not contained in vars(s)." An operator cannot be contained in vars(s), which is a set of variables.  In any case, one would not expect any successor of s_0 to be generated from o_4, because it is not applicable (the precondition v_1 = 0 is not satisfied).
+  #+END_QUOTE
+
+  Ok, easy fix, not relevant now.
+
+  #+BEGIN_QUOTE
+  Page 4, Section "Constraint Generation Strategy", definition of the set L: I think the universal quantifier in "forall s -[o]-> s'" should be existential, since increased bounds are considered for operators that label some transition out of the current fringe. If the quantifier is actually meant to be universal then the following example is wrong, since you could not, for example, generate the bound [Y_o_2 >= 1] from the state space in Figure 4, because o_2 also labels the transition from n_3 to n_6, and f(s_6) = 5; thus, the s_3 -[o_2]-> s_6 fails the condition f(s_6) < Y_f.
+  #+END_QUOTE
+
+  Ok, seems not relevant now.
+
+  #+BEGIN_QUOTE
+  Page 6, Section "Different Heuristic Functions", first and second bullet point in the list: Shouldn't "Y_T" be "Y_f"?
+  #+END_QUOTE
+
+  Ok, seems not relevant now.
+
+  #+BEGIN_QUOTE
+  Idem, third bullet point: You describe the constraint [Y_f >= 6] as "stronger" than the one that includes this constraint as well as [Y_a >= 1] for some actions a (first bullet point). However, this constraint, which only lower-bounds the objective function, does not give the solver any guidance on which action's count should be increased. It is free to increase the count of any action (including one that cannot be applied) to increase the objective value.
+  #+END_QUOTE
+
+  Address in rebuttal?
+
+  #+BEGIN_QUOTE
+  Page 6, section "Information of Benchmark Set", first paragraph: "\bar{lb} the mean best upper bound...". If you really mean that this is the average upper bound, please call it \bar{ub}. Or did you in fact mean that this is the best known _lower_ bound?
+  #+END_QUOTE
+
+  Ok, seems not relevant now.
+
+  #+BEGIN_QUOTE
+  It would be better for readability if the descriptions of the columns in the tables (this as well as table 2/3) is moved to the caption of the relevant table.
+  #+END_QUOTE
+
+  Ok, seems not relevant now.
+
+  #+BEGIN_QUOTE
+  Page 7, Section "OpSearch and OpSeq", first paragraph: This mentions the number of "restarts". I could not find anywhere in the paper any mention of what these "restarts" are. What is being restarted, and when?
+  #+END_QUOTE
+
+  Address in rebuttal: also mentioned by reviewer 2.
+
+  #+BEGIN_QUOTE
+  Page 8, Tables 2 and 3: Many of the columns in these tables do not provide any useful information. The total number of sequencing calls, total time, etc, is only meaningful to compare between the two sequencing methods when both of them reach the same "target" (e.g., both solve the problem). In many domains, this is not the case. For example, take the Barman domains, in which neither method solves any instance; here, opsearch has a (slightly) smaller number of sequencing calls than opseq. But what does that tell us? Only that opsearch completes fewer iterations before timing out. For the comparison of the amount of any "resource" spent (time, memory, iterations, etc) to make sense, you have to measure the amount spent until each algorithm reaches some pre-defined "goal". This may be generating an optimal plan, but it can also be proving a certain lower bound value. If you were able to say that opsearch need N iterations to reach a lower bound of X, while opseq needs M iterations to reach the same lower bound, then you would have a basis for making some claims about the relative efficiency of the two methods. But the data that is presented does not allow for that.
+  #+END_QUOTE
+
+  Address in rebuttal?
+
+  #+BEGIN_QUOTE
+  Davies et al (and also Haslum's 2012 paper) also measured the effectiveness of their algorithms as anytime lower-bounding functions, i.e., by comparing the highest lower bound proven within the given time and memory limits, against A* search as well (see Table 1 in Davies et al's paper, and Table 1 in Haslum's paper). This kind of comparison should be added to the analysis here as well, to show whether the search-based sequencing method improves on the previous methods in this regard. In particular, it would be interesting to see if the domains in which opsearch yields a better lower bound than opseq (if there are indeed any) correlate with the domains in which A* search outperforms opseq as a lower-bounding function, and how opsearch compares to A* in this respect in those domains.
+  #+END_QUOTE
+
+  Address (informally) in rebuttal?
+
+* Review 2 (weak reject)
+
+  #+BEGIN_QUOTE
+  The paper introduces a new method for turning operator counts into plans based on an A* search.
+  #+END_QUOTE
+
+  #+BEGIN_QUOTE
+  The paper is written and structured well and I like the detailed examples. The idea of using state-space search for sequencing operator counts is also very interesting, but the experimental results are not very convincing: the  new method leads to solving more tasks compared to the earlier SAT-based method in four of the tested domains, while coverage decreases in four other domains. I think before this paper should be accepted, you'd need to inspect more closely where and why OpSearch yields worse results than OpSeq and try to adapt the algorithm to handle these types of instances better. The paper in its current form evaluates only one algorithm (if we ignore the balanced/best bound setting). I believe there are many ways to widen the design space for OpSearch (the conclusion already mentions some) and find variants that lead to more convincing results.
+  #+END_QUOTE
+
+  #+BEGIN_QUOTE
+  Questions for the rebuttal:
+
+  1) "If BB finds a relaxed solution we obtain a valid operator count by rounding up the primal solution values to the nearest integers, and sequencing only if its cardinality and objective value are within 20% of the linear count.": what happens in the other cases?
+
+  2) Why is n_1 not generated and expanded in Figure 2 even though c(o_0) = 0?
+
+  3) "In particular, some initial heuristics can generate very large operator counts which are not useful to sequence": what do yo mean by "initial heuristics"? Do you mean heuristics for the initial state?
+
+  4) What are "restarts" in OpSeq and OpSearch?
+
+  5) What do you think could be an explanation for the fact that OpSearch solves fewer tasks than OpSeq in four domains?
+  #+END_QUOTE
+
+  Main points here!
+
+  1. We don't sequence. This follows OpSeq. Explain that this does not affect correctness.
+  2. Check.
+  3. Yes, probably, easy fix.
+  4. Have to explain better, thought this was clear. Restart needed for new op literals.
+  5. Good question. Let's analyze.
+
+  #+BEGIN_QUOTE
+  Comments you don't need to touch on in the rebuttal:
+
+  The algorithm did not become entirely clear to me. The example helps somewhat, but I think pseudo-code or just more details would help.
+
+  I think the paper should prove that OpSearch only finds optimal solutions in a theorem.
+
+  The paper states that OpSearch is "significantly better" in some domains. I recommend speaking about significance only if statistical tests have been performed. Here, it suffices to say that OpSearch solves more tasks than OpSeq in some domains. I think it's important to analyze the other direction as well though: OpSeq also solves more tasks than OpSearch in four domains.
+
+  The mean values in the tables would be more useful together with values for the standard deviation. Instead of the zco column, I recommend stating the geometric mean of the number of zero-cost operators divided by the total number of operators. For c_min and c_max I'd use the absolute minimum and maximum per domain instead of averaging over the numbers.
+
+  In Figure 6, it's not clear what the axes are. I guess 10.0 stands for 10^10 sequence calls? This should be explained in the caption.
+
+  Likewise, in Figure 7, I guess the base for the log axes is 10, but this should be made explicit. Also, I think it's more common to put the old algorithm on the y-axis and the new algorithm on the x-axis, but that's a question of personal preference.
+
+  In Figure 7, some points are outside of the plot.
+
+  Tables 2 and 3 are discussed before Figure 7 and should therefore be laid out in the same order.
+
+  In my opinion, Tables 2 and 3 should be combined. They should present a pairwise comparison and contain two columns side-by-side for the old and new algorithm for each anaylyzed attribute. Of course, only commonly solved tasks should be present in the table. Table 4 is then superfluous. Currently, it is unclear what S and R stand for if the tasks are unsolved. I think these values don't carry much meaning for unsolved tasks.
+  #+END_QUOTE
+
+  Ok, not relevant now.
+
+  #+BEGIN_QUOTE
+  Minor comments you also don't need to comment on in the rebuttal:
+
+  Evaluating the approach on a larger set of benchmarks would also be desirable.
+
+  I think the abstract is too long. I'd shorten the discussion of previous work.
+
+  "A search algorithm with an admissible heuristic function" -> A* search with an admissible heuristic
+
+  "i.e." and "e.g." need commas before and after
+
+  "a plan satisfying these operator counts exist++s++"
+
+  "using ++a++ standard search framework"
+
+  "IPC 2011 benchmark++s++"
+
+  "On tasks solved by both methods OpSearch requires to solve fewer operator sequencing problems than OpSeq": this reads as if it was the case for all tasks.
+
+  "e.g. pattern databases h^PDB (Edelkamp 2014), merge and shrink h^M&S" -> "e.g., pattern databases (Edelkamp 2014) and merge-and-shrink"
+
+  "++the++ state equation ++heuristic++ h^SEQ"
+
+  "optimal-cost" -> cost-optimal
+
+  "We present a novel strategy to construct a violated constraint during the expansion of the search graph by considering currently unavailable operators": it is not clear at this point what "currently" available operators are.
+
+  "State s_0 is a state s^* partial state." -> needs rewriting
+
+  The text sometimes uses $\mathbb N$ and sometimes $\mathbb Z^+$. To avoid confusion I'd use $\mathbb Z^+_0$ everywhere.
+
+  "The f-value of a state s estaimates the cost of ++a++ plan ++going through s++"
+
+  "a plan from s" -> an s-plan
+
+  "A* --is itself admissible, i.e.--"
+
+  "Early usages" -> Early uses
+
+  "unique integer program" -> single integer program
+
+  "Since every plan from s contain++s++"
+
+  "occurrences of ++an++ operator"
+
+  "bound++s++ literals"
+
+  "a state s ++in++ planning task \Pi"
+
+  Definition 4: it's unclear where the k_i come from.
+
+  "(2) e (3)" -> (2) and (3)
+
+  "the primal solution of IP_C contain--s-- useful information"
+
+  "solve optimally planning tasks" -> solve planning tasks optimally
+
+  Figure 1: use same font as in text, center image
+
+  "BB": use unabbreviated form when using it for the first time
+
+  "the overall process --proposed--"
+
+  "In ++the++ next section"
+
+  "translated to ++a++ generalized landmark constraint"
+
+  "its solves" -> it solves
+
+  "only if its cardinality and objective value are within 20% of the fractional operator counts": what happens in the other cases?
+
+  "OpSeq use++s++ this mechanism"
+
+  "composed by layers" -> composed of layers
+
+  "explaining whay the operator count--s-- is not"
+
+  "it reaches --to-- the assumptions that cause--s-- the formula's unsatisfiability."
+
+  "Proposed Approach" -> Sequencing Operators with State-Space Search
+
+  "If the operator count--s-- --provided-- is sequencable"
+
+  "one of the plans found" -> one of the found plans
+
+  "only generate++s++ bounds literals"
+
+  "--We consider that-- zero-cost operators"
+
+  "the value of variable v_o is set to s(v_o)": shouldn't this be s'(v_o)?
+
+  "and f-value at most Y_f" -> an f-value of at most Y_f. Also, at this point it is unclear what Y_f is.
+
+  "which represent++s++ the objective function"
+
+  The minimum over an empty set is undefined. Instead, you could use the infimum. Also, you could make it explicit over which $s$ the infimum goes.
+
+  "We assume that o_1 is an action landmark" -> We assume that {o_1} is an action landmark
+
+  "informing ++us++ that"
+
+  The paper has a Theorem 2, but where is Theorem 1?
+
+  Theorem 2: what is a "valid" constraint?
+
+  "S be ++the++ set"
+
+  "be ++a++ first state"
+
+  "The robot starts --at-- ++in++ the left room"
+
+  "OpSearch with different heuristics generate++s++"
+
+  "c_min" and "c_max" should have the horizontal lines above the complete variable name as in Table 1.
+
+  I'd move the description of all table headers into the table captions.
+
+  "the last three have also other operators only with unit cost" -> the last three only have zero-cost and unit-cost operators
+
+  "The benchmark ++set++ includes"
+
+  "zero cost" -> zero-cost
+
+  "settings from MIP solvers" -> settings for MIP solvers
+
+  "callbacks of CPLEX C++ interface" -> callbacks of the C++ interface in CPLEX (why are they "legacy"?)
+
+  "tries ++to++ balance"
+
+  "plots of ++the++ total number"
+
+  "solving --less-- ++fewer++ subproblems"
+
+  "intent to" -> intend to
+
+  Bibliography: "Van Den Briel" -> van den Briel, "fast downward" -> Fast Downward
+  #+END_QUOTE
+  Simple fixes, not relevant now.
+
+* Review 3 (accept)
+
+  #+BEGIN_QUOTE
+  This paper introduces a novel way to use A* for replacing the OpSeq phase of the Sequencing Operator Counts previously performed with a SAT solver. The OpSeq procedure is then termed as OpSearch. The main observation underlying this contribution is that the violated constraints are more succint when using A*.  Different experiments prove that the new algorithm requires less memory and significantly decrements the number of times this phase is invoked.
+  #+END_QUOTE
+  Ok.
+
+  #+BEGIN_QUOTE
+  It should be highlighted that this paper is very well written and makes a thorough review to the available techniques in Sequencing Operator Counts. A minor comment is that in page 5, I found the example a little bit confusing. .  In page 4 a task is presented as if it is going to be used later in the examples, but in page 5, a different example is spanned. Also, at the beginning of page 5 the meaning of solid edges/vertices is discussed, but none is presented until the second iteration (and that made me feel I misunderstood something ...)
+  #+END_QUOTE
+  Ok, easy fix.
+
+  #+BEGIN_QUOTE
+  As for the experiments, I found it a little bit strange that MiniSat 2.2 was used. That is a rather old SAT solver and even if that is the one originally used by Davies, I would have recommended using lingeling which also accepts propositional formula in DIMACS format (I assume here that DIMACS format was used as this is the easiest way to invoke a SAT solver). Indeed, in page 7, while discussing the results, it is mentioned that OpSearch looks better also in terms of memory usage. I wonder whether this can be due to the underlying SAT solver used.
+  #+END_QUOTE
+  Ok, not relevant now.
+
+  #+BEGIN_QUOTE
+  I only found a typo in page 4, under "Extended State and Successor Generation" where it is said that no variable is added for o2 since its count is zero, or for o3 since c(o3)=0, but it is the other way round.
+  #+END_QUOTE
+  Simple fix, not relevant now.
+
+  #+BEGIN_QUOTE
+  Also, in page 4, it says "generates bounds literals" -> "generates bound literals". And, in the same paragraph, it says "and f-value", to be replaced by "an f-value".
+  #+END_QUOTE
+  Simple fix, not relevant now.
+
+  #+BEGIN_QUOTE
+  In page 5, theorem 2, it should be "a valid constraint" instead of "an valid"
+  #+END_QUOTE
+  Simple fix, not relevant now.
+
+  # Local Variables:
+  # auto-fill-function: do-auto-fill
+  # ispell-local-dictionary: "english"
+  # fill-column: 150
+  # End:
