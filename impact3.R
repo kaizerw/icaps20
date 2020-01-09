@@ -1,11 +1,24 @@
 source('common.R')
 
+rows_to_keep <- function() {
+  c(
+    'instance',
+    'solved',
+    'seqs',
+    'restarts',
+    'total_astar_time',
+    'total_solve_time',
+    'planner_memory',
+    'mean_ops_by_constraint'
+  )
+}
+
 file <- 'results/12_06/4_blind_lmcut_oc_hstar.xlsx'
 
-summary_blind <- read_results(file, 'Geral', 0, 37)
-summary_lmcut <- read_results(file, 'Geral', 38, 37)
-summary_oc <- read_results(file, 'Geral', 76, 37)
-summary_hstar <- read_results(file, 'Geral', 114, 37)
+summary_blind <- read_results(file, 'Geral', 0, 37, rows_to_keep = rows_to_keep)
+summary_lmcut <- read_results(file, 'Geral', 38, 37, rows_to_keep = rows_to_keep)
+summary_oc <- read_results(file, 'Geral', 76, 37, rows_to_keep = rows_to_keep)
+summary_hstar <- read_results(file, 'Geral', 114, 37, rows_to_keep = rows_to_keep)
 
 coverages <- tribble(~heuristic, ~coverage, 
                      'blind', summary_blind[[36, 'solved']], 
@@ -13,10 +26,10 @@ coverages <- tribble(~heuristic, ~coverage,
                      'oc', summary_oc[[36, 'solved']],
                      'hstar', summary_hstar[[36, 'solved']])
 
-all_blind <- read_all_results_heuristics2(file, 'blind')
-all_lmcut <- read_all_results_heuristics2(file, 'lmcut')
-all_oc <- read_all_results_heuristics2(file, 'oc_seq_landmarks')
-all_hstar <- read_all_results_heuristics2(file, 'hstar')
+all_blind <- read_all_results_heuristics2(file, 'blind', rows_to_keep = rows_to_keep)
+all_lmcut <- read_all_results_heuristics2(file, 'lmcut', rows_to_keep = rows_to_keep)
+all_oc <- read_all_results_heuristics2(file, 'oc_seq_landmarks', rows_to_keep = rows_to_keep)
+all_hstar <- read_all_results_heuristics2(file, 'hstar', rows_to_keep = rows_to_keep)
 
 solved_by_blind <- all_blind %>% filter(solved == 1)
 solved_by_lmcut <- all_lmcut %>% filter(solved == 1)
@@ -47,7 +60,7 @@ new_names <- c("${\\scriptstyle C}$" = "coverage",
 
 summaries <- bind_rows(solved_by_blind, solved_by_lmcut, solved_by_oc, solved_by_hstar) %>%
   bind_cols(coverages) %>% 
-  select(-heuristic1) %>%
+  select(-heuristic1, -restarts) %>%
   rename(!!!new_names) %>%
   select(-"${\\scriptstyle \\bar{S_t}}$") %>%
   rename(" "="heuristic")
@@ -57,5 +70,6 @@ save_table(
   'Comparison using different heuristic functions',
   'summary_heuristics3',
   environment = 'table',
-  only.contents = T
+  only.contents = T,
+  digits = c(0, 0, 0, 0, 0, 0, 0)
 )

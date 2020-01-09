@@ -75,5 +75,6 @@ save_table(
   'Comparison using different heuristic functions',
   'summary_heuristics4',
   environment = 'table',
-  only.contents = T
+  only.contents = T,
+  digits = c(0, 0, 0, 0, 0, 0, 0)
 )

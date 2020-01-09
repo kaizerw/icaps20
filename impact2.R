@@ -1,21 +1,34 @@
 source('common.R')
 
+rows_to_keep <- function() {
+  c(
+    'instance',
+    'solved',
+    'seqs',
+    'restarts',
+    'total_astar_time',
+    'total_solve_time',
+    'planner_memory',
+    'mean_ops_by_constraint'
+  )
+}
+
 file_blind <- 'results/11_29/1_opsearch_blind.xlsx'
 file_lmcut <- 'results/11_14/0_ignore_zero_cost_ops.xlsx'
 file_oc <- 'results/11_29/2_opsearch_oc_seq_landmarks.xlsx'
 
-blind_summary <- read_results(file_blind, 'Geral', 0, 13)
-lmcut_summary <- read_results(file_lmcut, 'Geral', 0, 13)
-oc_summary <- read_results(file_oc, 'Geral', 0, 13)
+blind_summary <- read_results(file_blind, 'Geral', 0, 13, rows_to_keep = rows_to_keep)
+lmcut_summary <- read_results(file_lmcut, 'Geral', 0, 13, rows_to_keep = rows_to_keep)
+oc_summary <- read_results(file_oc, 'Geral', 0, 13, rows_to_keep = rows_to_keep)
 
 coverages <- tribble(~heuristic, ~coverage, 
                      'blind', blind_summary[[12, 'solved']], 
                      'lmcut', lmcut_summary[[12, 'solved']],
                      'oc', oc_summary[[12, 'solved']])
 
-blind_all <- read_all_results(file_blind, 'blind')
-lmcut_all <- read_all_results(file_lmcut, 'LMCUT_T3')
-oc_all <- read_all_results(file_oc, 'oc_seq_landmarks')
+blind_all <- read_all_results(file_blind, 'blind', rows_to_keep = rows_to_keep)
+lmcut_all <- read_all_results(file_lmcut, 'LMCUT_T3', rows_to_keep = rows_to_keep)
+oc_all <- read_all_results(file_oc, 'oc_seq_landmarks', rows_to_keep = rows_to_keep)
 
 solved_by_blind <- blind_all %>% filter(solved == 1)
 solved_by_lmcut <- lmcut_all %>% filter(solved == 1)
@@ -42,7 +55,7 @@ new_names <- c("${\\scriptstyle C}$" = "coverage",
 
 summaries <- bind_rows(solved_by_blind, solved_by_lmcut, solved_by_oc) %>%
   bind_cols(coverages) %>% 
-  select(-heuristic1) %>%
+  select(-heuristic1, -restarts) %>%
   rename(!!!new_names) %>%
   select(-"${\\scriptstyle \\bar{S_t}}$") %>%
   rename(" "="heuristic")
@@ -52,5 +65,6 @@ save_table(
   'Comparison using different heuristic functions',
   'summary_heuristics2',
   environment = 'table',
-  only.contents = T
+  only.contents = T,
+  digits = c(0, 0, 0, 0, 0, 0, 0)
 )
