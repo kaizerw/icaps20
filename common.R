@@ -23,7 +23,7 @@ rows_to_keep <- function() {
 }
 
 read_results <-
-  function(filename, sheet, n_rows_to_skip, n_rows_to_read, rows_to_keep = rows_to_keep) {
+  function(filename, sheet, n_rows_to_skip, n_rows_to_read, rows_to_keep) {
     read_excel(filename, sheet = sheet, skip = n_rows_to_skip, n_max = n_rows_to_read) %>%
       as_tibble() %>%
       select(rows_to_keep()) %>%
@@ -46,13 +46,13 @@ read_results <-
              mean_ops_by_constraint = as.integer(mean_ops_by_constraint))
   }
 
-read_all_results <- function(filename, sheet) {
+read_all_results <- function(filename, sheet, rows_to_keep) {
   n_rows_to_read <- 22
   dfs <- list()
   for (i in seq(0, 10)) {
     n_rows_to_skip <- i * n_rows_to_read + i
     dfs[[i + 1]] <- read_results(filename, sheet, n_rows_to_skip,
-                                 n_rows_to_read)
+                                 n_rows_to_read, rows_to_keep)
   }
   bind_rows(dfs) %>%
     rename(instance = domain) %>%
