@@ -77,7 +77,7 @@ read_all_results_heuristics <- function(filename, sheet) {
     mutate(instance = str_replace(instance, 'SAT/', ''))
 }
 
-read_all_results_heuristics2 <- function(filename, sheet) {
+read_all_results_heuristics2 <- function(filename, sheet, rows_to_keep) {
   dfs <- list()
   
   indices <- c(1, 16, 20, 28, 35, 40, 48, 56, 71, 86, 91, 149, 182, 186, 193, 204, 212, 220, 226, 230, 
@@ -85,7 +85,7 @@ read_all_results_heuristics2 <- function(filename, sheet) {
   
   for (i in seq(1, length(indices) - 1)) {
     n_rows_to_read <- indices[i + 1] - indices[i] - 1
-    dfs[[i + 1]] <- read_results(filename, sheet, indices[i] - 1, n_rows_to_read)
+    dfs[[i + 1]] <- read_results(filename, sheet, indices[i] - 1, n_rows_to_read, rows_to_keep)
   }
 
   bind_rows(dfs) %>%
