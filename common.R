@@ -145,7 +145,8 @@ make_summary <- function(df, method) {
       total_seq_time = mean(total_seq_time),
       total_solve_time = mean(total_solve_time),
       planner_memory = mean(planner_memory),
-      mean_ops_by_constraint = mean(mean_ops_by_constraint)
+      mean_ops_by_constraint = mean(mean_ops_by_constraint),
+      perc = mean(perc)
     )
 }
 

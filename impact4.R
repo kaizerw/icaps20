@@ -25,6 +25,11 @@ lmcut_summary <- read_results(file_lmcut, 'Geral', 0, 13, rows_to_keep = rows_to
 oc_summary <- read_results(file_oc, 'Geral', 0, 13, rows_to_keep = rows_to_keep)
 sat_summary <- read_results(file_sat, 'Geral', 14, 13, rows_to_keep = rows_to_keep)
 
+blind_summary <- blind_summary %>% mutate(perc = total_seq_time / total_solve_time * 100)
+lmcut_summary <- lmcut_summary %>% mutate(perc = total_seq_time / total_solve_time * 100)
+oc_summary <- oc_summary %>% mutate(perc = total_seq_time / total_solve_time * 100)
+sat_summary <- sat_summary %>% mutate(perc = total_seq_time / total_solve_time * 100)
+
 coverages <- tribble(~heuristic, ~coverage, 
                      'blind', blind_summary[[12, 'solved']], 
                      'lmcut', lmcut_summary[[12, 'solved']],
@@ -35,6 +40,11 @@ blind_all <- read_all_results(file_blind, 'blind', rows_to_keep = rows_to_keep)
 lmcut_all <- read_all_results(file_lmcut, 'LMCUT_T3', rows_to_keep = rows_to_keep)
 oc_all <- read_all_results(file_oc, 'oc_seq_landmarks', rows_to_keep = rows_to_keep)
 sat_all <- read_all_results(file_sat, 'SAT', rows_to_keep = rows_to_keep)
+
+blind_all <- blind_all %>% mutate(perc = total_seq_time / total_solve_time * 100)
+lmcut_all <- lmcut_all %>% mutate(perc = total_seq_time / total_solve_time * 100)
+oc_all <- oc_all %>% mutate(perc = total_seq_time / total_solve_time * 100)
+sat_all <- sat_all %>% mutate(perc = total_seq_time / total_solve_time * 100)
 
 solved_by_blind <- blind_all %>% filter(solved == 1)
 solved_by_lmcut <- lmcut_all %>% filter(solved == 1)
@@ -58,16 +68,20 @@ solved_by_sat <- make_summary(solved_by_sat, 'sat') %>% rename(heuristic = metho
 
 new_names <- c("${\\scriptstyle C}$" = "coverage",
                "${\\scriptstyle S}$" = "seqs",
+               "${\\scriptstyle R}$" = "restarts",
                "${\\scriptstyle \\bar{S_t}}$" = "total_seq_time",
                "${\\scriptstyle \\bar{T_t}}$" = "total_solve_time",
+               "${\\scriptstyle \\bar{p}}$" = "perc",
                "${\\scriptstyle \\bar{M}}$" = "planner_memory",
                "${\\scriptstyle \\bar{u}}$" = "mean_ops_by_constraint")
 
 summaries <- bind_rows(solved_by_blind, solved_by_lmcut, solved_by_oc, solved_by_sat) %>%
   bind_cols(coverages) %>% 
-  select(-heuristic1, -restarts) %>%
+  select(-heuristic1) %>%
   rename(!!!new_names) %>%
   select(-"${\\scriptstyle \\bar{S_t}}$") %>%
+  select("heuristic", "${\\scriptstyle C}$", "${\\scriptstyle S}$", "${\\scriptstyle R}$", "${\\scriptstyle \\bar{T_t}}$", 
+         "${\\scriptstyle \\bar{M}}$", "${\\scriptstyle \\bar{u}}$", "${\\scriptstyle \\bar{p}}$") %>%
   rename(" "="heuristic")
 
 save_table(
@@ -76,5 +90,5 @@ save_table(
   'summary_heuristics4',
   environment = 'table',
   only.contents = T,
-  digits = c(0, 0, 0, 0, 0, 0, 0)
+  digits = c(0, 0, 0, 0, 0, 0, 0, 0, 1)
 )
