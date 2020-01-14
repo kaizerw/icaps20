@@ -52,6 +52,3 @@ g5 <- scatter_plot(log2(total_time$our), log2(total_time$sat),
 ggsave('figs/main_scatter_1.pdf', plot = ggarrange(g1, g2, nrow = 1), family = 'Times', width = 35, height = 15)
 ggsave('figs/main_scatter_2.pdf', plot = ggarrange(g3, g4, nrow = 1), family = 'Times', width = 35, height = 15)
 ggsave('figs/main_scatter_3.pdf', plot = g5, family = 'Times', width = 20, height = 15)
-
-all <- ggarrange(g1, g2, g3, g4, g5, nrow = 1)
-ggsave('figs/main_scatter.pdf', plot = all, family = 'Times', width = 38, height = 8)
