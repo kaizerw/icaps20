@@ -14,7 +14,7 @@ rows_to_keep <- function() {
   )
 }
 
-filename <- 'results/11_14/0_ignore_zero_cost_ops.xlsx'
+filename <- 'results/12_17/4_get_best_bounds_1.xlsx'
 
 our <- read_results(filename, 'Geral', 0, 12, rows_to_keep = rows_to_keep)
 sat <- read_results(filename, 'Geral', 14, 12, rows_to_keep = rows_to_keep)
