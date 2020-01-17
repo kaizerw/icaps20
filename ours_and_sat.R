@@ -43,7 +43,7 @@ sat <- sat %>% rename(!!new_names) %>% select(-"${\\scriptstyle \\bar{S_t}}$") %
          "${\\scriptstyle \\bar{M}}$", "${\\scriptstyle \\bar{u}}$", "${\\scriptstyle \\bar{p}}$", "${\\scriptstyle bb}$")
 
 save_table(sat, 'OpSeq.',         'sat', environment = 'table', only.contents = T, 
-           hline.after = c(-1, 0, nrow(sat) - 1, nrow(sat)), digits = c(0, 0, 0, 0, 0, 0, 0, 0, 1, 1))
+           hline.after = c(-1, 0, nrow(sat) - 1, nrow(sat)), digits = c(0, 0, 0, 0, 0, 0, 0, 0, 1, 0))
 save_table(our, '\\oursolver{}.', 'our', environment = 'table', only.contents = T, 
-           hline.after = c(-1, 0, nrow(our) - 1, nrow(our)), digits = c(0, 0, 0, 0, 0, 0, 0, 0, 1, 1))
+           hline.after = c(-1, 0, nrow(our) - 1, nrow(our)), digits = c(0, 0, 0, 0, 0, 0, 0, 0, 1, 0))
 
