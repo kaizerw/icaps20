@@ -1,12 +1,26 @@
 source('common.R')
 
-filename_df <- 'results/11_14/1_emphasis_default_20m.xlsx'
-filename_bb <- 'results/11_14/1_emphasis_bestbound_20m.xlsx'
+rows_to_keep <- function() {
+  c(
+    'instance',
+    'solved',
+    'seqs',
+    'restarts',
+    'total_astar_time',
+    'total_solve_time',
+    'planner_memory',
+    'mean_ops_by_constraint',
+    'best_bound'
+  )
+}
 
-our_df <- read_all_results(filename_df, 'LMCUT_T3')
-our_bb <- read_all_results(filename_bb, 'LMCUT_T3')
-sat_df <- read_all_results(filename_df, 'SAT')
-sat_bb <- read_all_results(filename_bb, 'SAT')
+filename_df <- 'results/12_17/5_emphasis_default.xlsx'
+filename_bb <- 'results/12_17/5_emphasis_bestbound.xlsx'
+
+our_df <- read_all_results(filename_df, 'LMCUT_T3', rows_to_keep = rows_to_keep)
+our_bb <- read_all_results(filename_bb, 'LMCUT_T3', rows_to_keep = rows_to_keep)
+sat_df <- read_all_results(filename_df, 'SAT', rows_to_keep = rows_to_keep)
+sat_bb <- read_all_results(filename_bb, 'SAT', rows_to_keep = rows_to_keep)
 
 seqs_our <- tibble(df = our_df$seqs, bb = our_bb$seqs, type = 'OpSearch') %>%
   filter(!is.na(df), !is.na(bb))
@@ -30,7 +44,7 @@ all <- ggplot(all, aes(log2(df), log2(bb))) +
   geom_point(size = 15, shape = 1, fill = "white", alpha = 1) +
   geom_point(size = 15, shape = 16, fill = "black", alpha = 0.3) +
   facet_wrap(~type, scales = "fixed") +
-  coord_fixed() + xlim(0, 12) + ylim(0, 12)
+  coord_fixed() + xlim(0, 15) + ylim(0, 15)
 ggsave('figs/mip_scatter.pdf', plot = all, family = 'Times', 
        width = 35, height = 15)
 
