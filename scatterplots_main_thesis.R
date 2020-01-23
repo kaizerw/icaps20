@@ -21,32 +21,32 @@ sat <- read_all_results(filename, 'SAT', rows_to_keep = rows_to_keep)
 
 seqs <- tibble(our = our$seqs, sat = sat$seqs) %>%
   filter(!is.na(our), !is.na(sat)) %>% mutate(our = our + 1, sat = sat + 1)
-g1 <- scatter_plot(log2(seqs$our), log2(seqs$sat),
-             x_label = 'OpSearch', y_label = 'OpSeq',
+g1 <- scatter_plot(log2(seqs$sat), log2(seqs$our),
+             x_label = 'OpSeq', y_label = 'OpSearch',
              subtitle = TeX("$S$"), fontsize = 80, pointsize=20) + xlim(0, 13) + ylim(0, 13)
 
 planner_memory <- tibble(our = our$planner_memory, sat = sat$planner_memory) %>%
   filter(!is.na(our), !is.na(sat)) %>% mutate(our = our + 1, sat = sat + 1)
-g2 <- scatter_plot(log2(planner_memory$our), log2(planner_memory$sat),
-             x_label = 'OpSearch', y_label = 'OpSeq',
+g2 <- scatter_plot(log2(planner_memory$sat), log2(planner_memory$our),
+             x_label = 'OpSeq', y_label = 'OpSearch',
              subtitle = TeX("$M$"), fontsize = 80, pointsize=20) + xlim(6, 13) + ylim(6, 13)
 
 mean_ops_by_constraint <- tibble(our = our$mean_ops_by_constraint, sat = sat$mean_ops_by_constraint) %>%
   filter(!is.na(our), !is.na(sat)) %>% mutate(our = our + 1, sat = sat + 1)
-g3 <- scatter_plot(log2(mean_ops_by_constraint$our), log2(mean_ops_by_constraint$sat), 
-             x_label = 'OpSearch', y_label = 'OpSeq',
+g3 <- scatter_plot(log2(mean_ops_by_constraint$sat), log2(mean_ops_by_constraint$our), 
+             x_label = 'OpSeq', y_label = 'OpSearch',
              subtitle = TeX("$\\bar{u}$"), fontsize = 80, pointsize=20) + xlim(0, 7) + ylim(0, 7)
 
 seqs_time <- tibble(our = our$total_seq_time, sat = sat$total_seq_time) %>%
   filter(!is.na(our), !is.na(sat)) %>% mutate(our = our + 1, sat = sat + 1)
-g4 <- scatter_plot(log2(seqs_time$our), log2(seqs_time$sat),
-             x_label = 'OpSearch', y_label = 'OpSeq',
+g4 <- scatter_plot(log2(seqs_time$sat), log2(seqs_time$our),
+             x_label = 'OpSeq', y_label = 'OpSearch',
              subtitle = TeX("$S_t$"), fontsize = 80, pointsize=20) + xlim(0, 12) + ylim(0, 12)
 
 total_time <- tibble(our = our$total_solve_time, sat = sat$total_solve_time) %>%
   filter(!is.na(our), !is.na(sat)) %>% mutate(our = our + 1, sat = sat + 1)
-g5 <- scatter_plot(log2(total_time$our), log2(total_time$sat), 
-             x_label = 'OpSearch', y_label = 'OpSeq',
+g5 <- scatter_plot(log2(total_time$sat), log2(total_time$our), 
+             x_label = 'OpSeq', y_label = 'OpSearch',
              subtitle = TeX("$T_t$"), fontsize = 80, pointsize=20) + xlim(0, 13) + ylim(0, 13)
 
 ggsave('figs/main_scatter_1.pdf', plot = g1, family = 'Times', width = 25, height = 25)

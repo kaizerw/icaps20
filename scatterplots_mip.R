@@ -29,7 +29,7 @@ seqs_sat <- tibble(df = sat_df$seqs, bb = sat_bb$seqs, type = 'OpSeq') %>%
 all <- bind_rows(seqs_our, seqs_sat)
 
 all <- ggplot(all, aes(log2(df), log2(bb))) +
-  xlab('default') + ylab('best bound') +
+  xlab('balanced') + ylab('best bound') +
   geom_abline(intercept = 0, slope = 1) +
   theme_minimal() +
   theme(
@@ -50,7 +50,7 @@ ggsave('figs/mip_scatter.pdf', plot = all, family = 'Times',
 
 
 #g1 <- scatter_plot(log2(seqs_our$df), log2(seqs_our$bb),
-#             x_label = "default",
+#             x_label = "balanced",
 #             y_label = "best bound",
 #             subtitle = 'OpSearch') + xlim(0, 12) + ylim(0, 12)
 #g2 <- scatter_plot(log2(seqs_sat$df), log2(seqs_sat$bb),
