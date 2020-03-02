@@ -46,7 +46,7 @@ all <- ggplot(all, aes(log2(df), log2(bb))) +
   facet_wrap(~type, scales = "fixed") +
   coord_fixed() + xlim(0, 15) + ylim(0, 15)
 ggsave('figs/mip_scatter.pdf', plot = all, family = 'Times', 
-       width = 35, height = 15)
+       width = 31, height = 15)
 
 
 #g1 <- scatter_plot(log2(seqs_our$df), log2(seqs_our$bb),
