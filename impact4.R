@@ -15,15 +15,16 @@ rows_to_keep <- function() {
   )
 }
 
-file_blind <- 'results/11_29/1_opsearch_blind.xlsx'
-file_lmcut <- 'results/11_14/0_ignore_zero_cost_ops.xlsx'
-file_oc <- 'results/11_29/2_opsearch_oc_seq_landmarks.xlsx'
-file_sat <- 'results/11_14/0_ignore_zero_cost_ops.xlsx'
+#file_blind <- 'results/11_29/1_opsearch_blind.xlsx'           # results using CPLEX 12.8
+#file_lmcut <- 'results/11_14/0_ignore_zero_cost_ops.xlsx'     # results using CPLEX 12.8
+#file_oc <- 'results/11_29/2_opsearch_oc_seq_landmarks.xlsx'   # results using CPLEX 12.8
+#file_sat <- 'results/11_14/0_ignore_zero_cost_ops.xlsx'       # results using CPLEX 12.8
+filename <- 'results/cplex1210/2_impact_h_function_part1.xlsx' # results using CPLEX 12.10
 
-blind_summary <- read_results(file_blind, 'Geral', 0, 13, rows_to_keep = rows_to_keep)
-lmcut_summary <- read_results(file_lmcut, 'Geral', 0, 13, rows_to_keep = rows_to_keep)
-oc_summary <- read_results(file_oc, 'Geral', 0, 13, rows_to_keep = rows_to_keep)
-sat_summary <- read_results(file_sat, 'Geral', 14, 13, rows_to_keep = rows_to_keep)
+sat_summary <- read_results(filename, 'Geral', 0, 13, rows_to_keep = rows_to_keep)
+blind_summary <- read_results(filename, 'Geral', 14, 13, rows_to_keep = rows_to_keep)
+lmcut_summary <- read_results(filename, 'Geral', 28, 13, rows_to_keep = rows_to_keep)
+oc_summary <- read_results(filename, 'Geral', 42, 13, rows_to_keep = rows_to_keep)
 
 blind_summary <- blind_summary %>% mutate(perc = total_seq_time / total_solve_time * 100)
 lmcut_summary <- lmcut_summary %>% mutate(perc = total_seq_time / total_solve_time * 100)
@@ -36,10 +37,10 @@ coverages <- tribble(~heuristic, ~coverage,
                      'oc', oc_summary[[12, 'solved']],
                      'sat', sat_summary[[12, 'solved']])
 
-blind_all <- read_all_results(file_blind, 'blind', rows_to_keep = rows_to_keep)
-lmcut_all <- read_all_results(file_lmcut, 'LMCUT_T3', rows_to_keep = rows_to_keep)
-oc_all <- read_all_results(file_oc, 'oc_seq_landmarks', rows_to_keep = rows_to_keep)
-sat_all <- read_all_results(file_sat, 'SAT', rows_to_keep = rows_to_keep)
+sat_all <- read_all_results(filename, 'OpSeq2', rows_to_keep = rows_to_keep)
+blind_all <- read_all_results(filename, 'OpSearch_blind2', rows_to_keep = rows_to_keep)
+lmcut_all <- read_all_results(filename, 'OpSearch_lmcut2', rows_to_keep = rows_to_keep)
+oc_all <- read_all_results(filename, 'OpSearch_oc2', rows_to_keep = rows_to_keep)
 
 blind_all <- blind_all %>% mutate(perc = total_seq_time / total_solve_time * 100)
 lmcut_all <- lmcut_all %>% mutate(perc = total_seq_time / total_solve_time * 100)

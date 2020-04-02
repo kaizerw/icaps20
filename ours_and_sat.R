@@ -14,10 +14,11 @@ rows_to_keep <- function() {
   )
 }
 
-filename <- 'results/12_17/4_get_best_bounds_1.xlsx'
+#filename <- 'results/12_17/4_get_best_bounds_1.xlsx' # results using CPLEX 12.8
+filename <- 'results/cplex1210/1_opseq_opsearch.xlsx' # results using CPLEX 12.10
 
-our <- read_results(filename, 'Geral', 0, 12, rows_to_keep = rows_to_keep)
-sat <- read_results(filename, 'Geral', 14, 12, rows_to_keep = rows_to_keep)
+sat <- read_results(filename, 'Geral', 0, 12, rows_to_keep = rows_to_keep)
+our <- read_results(filename, 'Geral', 14, 12, rows_to_keep = rows_to_keep)
 
 our <- our %>% mutate(perc = total_seq_time / total_solve_time * 100)
 sat <- sat %>% mutate(perc = total_seq_time / total_solve_time * 100)

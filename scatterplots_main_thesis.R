@@ -14,10 +14,11 @@ rows_to_keep <- function() {
   )
 }
 
-filename <- 'results/12_17/4_get_best_bounds_1.xlsx'
+#filename <- 'results/12_17/4_get_best_bounds_1.xlsx' # results using CPLEX 12.8
+filename <- 'results/cplex1210/1_opseq_opsearch.xlsx' # results using CPLEX 12.10
 
-our <- read_all_results(filename, 'LMCUT_T3', rows_to_keep = rows_to_keep)
-sat <- read_all_results(filename, 'SAT', rows_to_keep = rows_to_keep)
+our <- read_all_results(filename, 'OpSearch1', rows_to_keep = rows_to_keep)
+sat <- read_all_results(filename, 'OpSeq1', rows_to_keep = rows_to_keep)
 
 seqs <- tibble(our = our$seqs, sat = sat$seqs) %>%
   filter(!is.na(our), !is.na(sat)) %>% mutate(our = our + 1, sat = sat + 1)

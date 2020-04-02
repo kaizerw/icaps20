@@ -16,13 +16,14 @@ rows_to_keep <- function() {
 }
 
 
-file <- 'results/12_17/4_blind_lmcut_oc_hstar_sat.xlsx'
+#file <- 'results/12_17/4_blind_lmcut_oc_hstar_sat.xlsx'       # results using CPLEX 12.8
+filename <- 'results/cplex1210/3_impact_h_function_part2.xlsx' # results using CPLEX 12.10
 
-summary_blind <- read_results(file, 'Geral', 0, 37, rows_to_keep = rows_to_keep)
-summary_lmcut <- read_results(file, 'Geral', 38, 37, rows_to_keep = rows_to_keep)
-summary_oc <- read_results(file, 'Geral', 76, 37, rows_to_keep = rows_to_keep)
-summary_hstar <- read_results(file, 'Geral', 114, 37, rows_to_keep = rows_to_keep)
-summary_sat <- read_results(file, 'Geral', 152, 37, rows_to_keep = rows_to_keep)
+summary_sat <- read_results(filename, 'Geral', 0, 37, rows_to_keep = rows_to_keep)
+summary_blind <- read_results(filename, 'Geral', 38, 37, rows_to_keep = rows_to_keep)
+summary_lmcut <- read_results(filename, 'Geral', 76, 37, rows_to_keep = rows_to_keep)
+summary_oc <- read_results(filename, 'Geral', 114, 37, rows_to_keep = rows_to_keep)
+summary_hstar <- read_results(filename, 'Geral', 152, 37, rows_to_keep = rows_to_keep)
 
 summary_blind <- summary_blind %>% mutate(perc = total_seq_time / total_solve_time * 100)
 summary_lmcut <- summary_lmcut %>% mutate(perc = total_seq_time / total_solve_time * 100)
@@ -37,11 +38,11 @@ coverages <- tribble(~heuristic, ~coverage,
                      'hstar', summary_hstar[[36, 'solved']],
                      'sat', summary_sat[[36, 'solved']])
 
-all_blind <- read_all_results_heuristics2(file, 'blind', rows_to_keep = rows_to_keep)
-all_lmcut <- read_all_results_heuristics2(file, 'lmcut', rows_to_keep = rows_to_keep)
-all_oc <- read_all_results_heuristics2(file, 'oc_seq_landmarks', rows_to_keep = rows_to_keep)
-all_hstar <- read_all_results_heuristics2(file, 'hstar', rows_to_keep = rows_to_keep)
-all_sat <- read_all_results_heuristics2(file, 'SAT', rows_to_keep = rows_to_keep)
+all_sat <- read_all_results_heuristics2(filename, 'OpSeq3', rows_to_keep = rows_to_keep)
+all_blind <- read_all_results_heuristics2(filename, 'OpSearch_blind3', rows_to_keep = rows_to_keep)
+all_lmcut <- read_all_results_heuristics2(filename, 'OpSearch_lmcut3', rows_to_keep = rows_to_keep)
+all_oc <- read_all_results_heuristics2(filename, 'OpSearch_oc3', rows_to_keep = rows_to_keep)
+all_hstar <- read_all_results_heuristics2(filename, 'OpSearch_hstar3', rows_to_keep = rows_to_keep)
 
 all_blind <- all_blind %>% mutate(perc = total_seq_time / total_solve_time * 100)
 all_lmcut <- all_lmcut %>% mutate(perc = total_seq_time / total_solve_time * 100)

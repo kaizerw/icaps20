@@ -40,6 +40,17 @@ read_results <-
       mutate(domain = str_replace(domain, 'oc_seq_landmarks/', '')) %>%
       mutate(domain = str_replace(domain, 'lmcut/', '')) %>%
       mutate(domain = str_replace(domain, 'hstar/', '')) %>%
+      mutate(domain = str_replace(domain, 'OpSeq1/', '')) %>%
+      mutate(domain = str_replace(domain, 'OpSearch1/', '')) %>%
+      mutate(domain = str_replace(domain, 'OpSeq2/', '')) %>%
+      mutate(domain = str_replace(domain, 'OpSearch_blind2/', '')) %>%
+      mutate(domain = str_replace(domain, 'OpSearch_lmcut2/', '')) %>%
+      mutate(domain = str_replace(domain, 'OpSearch_oc2/', '')) %>%
+      mutate(domain = str_replace(domain, 'OpSeq3/', '')) %>%
+      mutate(domain = str_replace(domain, 'OpSearch_blind3/', '')) %>%
+      mutate(domain = str_replace(domain, 'OpSearch_lmcut3/', '')) %>%
+      mutate(domain = str_replace(domain, 'OpSearch_oc3/', '')) %>%
+      mutate(domain = str_replace(domain, 'OpSearch_hstar3/', '')) %>%
       mutate(planner_memory = planner_memory / 1e3) %>%
       mutate(mean_ops_by_constraint = mean_ops_by_constraint * 100) %>%
       mutate(planner_memory = as.integer(planner_memory), 
